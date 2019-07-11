@@ -1,0 +1,36 @@
+{
+	"author": "Curt Elsasser",
+	"description": "Library that should be included in every Colony project we build",
+	"homepage": "https://github.com/celsasser/colony-core.git#readme",
+	"license": "Apache-2.0",
+	"main": "lib/index.js",
+	"name": "colony-core",
+	"readmeFilename": "README.md",
+	"version": "0.0.1",
+	"dependencies": {
+		"lodash": "4.17.14"
+	},
+	"devDependencies": {
+		"eslint": "6.0.1",
+		"fs-extra": "8.1.0",
+		"mocha": "6.1.4",
+		"pig-quality": "1.0.0",
+		"sinon": "7.3.2"
+	},
+	"keywords": [
+		"core",
+		"lib",
+		"colony"
+	],
+	"scripts": {
+		"lint": "eslint --config ./node_modules/pig-quality/server.eslintrc.json lib/**/*.js test/**/*.js",
+		"lint+fix": "eslint ./node_modules/pig-quality/server.eslintrc.json --fix lib/**/*.js test/**/*.js",
+		"test": "npm run test:unit",
+		"test:integration": "echo > /dev/null",
+		"test:unit": "mocha --recursive ./test/unit"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/celsasser/colony-core.git"
+	}
+}
