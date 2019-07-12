@@ -26,10 +26,10 @@ describe("index", function() {
 		moduleNames.forEach((name)=>{
 			const moduleLoad=_.get(index, name),
 				moduleCache=_.get(index, name);
-			assert.equal(typeof (moduleLoad), "object", `module=${name} failed`);
+			assert.strictEqual(typeof (moduleLoad), "object", `module=${name} failed`);
 			assert.strictEqual(moduleLoad, moduleCache);
 			set.add(moduleLoad);
 		});
-		assert.equal(moduleNames.length, set.size);
+		assert.strictEqual(moduleNames.length, set.size);
 	});
 });

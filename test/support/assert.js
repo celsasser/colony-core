@@ -2,9 +2,6 @@
  * Date: 3/5/2018
  * Time: 9:10 PM
  * @license MIT (see project's LICENSE file)
- *
- * There is both runtime support and test support. We flag those that are safe for any runtime environment.
- * But most are intended for unit and integration testing
  */
 
 const _=require("lodash");
@@ -15,11 +12,9 @@ const type=require("../../lib/type");
 
 // mixin the guys that we like
 exports.doesNotThrow=assert.doesNotThrow;
-exports.equal=assert.strictEqual;
 exports.false=(condition, ...args)=>assert.ok(Boolean(condition)===false, ...args);
 exports.ifError=assert.ifError;
 exports.notDeepEqual=assert.notDeepEqual;
-exports.notEqual=assert.strictEqual;
 exports.notStrictEqual=assert.notStrictEqual;
 exports.ok=assert.ok;
 exports.strictEqual=assert.strictEqual;
@@ -104,11 +99,26 @@ exports.immutable=function(...objects) {
 };
 
 /**
- * @param {string} full - the whole string
- * @param {string} partial - the part that should match the beginning
+ * Supports regex comparison
+ * @param {String} actual
+ * @param {String|RegExp} pattern
  */
-exports.startsWith=function(full, partial) {
-	if(_.startsWith(full, partial)===false) {
-		assert.ok(false, `"${full}" does not start with "${partial}"`);
+exports.matches=function(actual, pattern) {
+	if(_.isRegExp(pattern)) {
+		if(pattern.test(actual)===false) {
+			throw new Error(`assert.matches() failed: "${actual}" does not match ${pattern.toString()}`);
+		}
+	} else {
+		assert.strictEqual(actual, pattern);
+	}
+};
+
+/**
+ * @param {string} actual - the whole string
+ * @param {string} expected - the part that should match the beginning
+ */
+exports.startsWith=function(actual, expected) {
+	if(_.startsWith(actual, expected)===false) {
+		assert.ok(false, `assert.startsWith() failed: "${actual}" does not start with "${expected}"`);
 	}
 };

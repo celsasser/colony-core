@@ -24,15 +24,17 @@ describe("error", function() {
 					error: new Error("error"),
 					instance: "instance",
 					message: "message",
+					method: "method",
 					statusCode: 100
 				});
 				assert.deepEqual(_toPOJO(instance), {
-					"code": 200,
-					"details": "details",
-					"error": new Error("error"),
-					"instance": "instance",
-					"message": "message",
-					"statusCode": 100
+					code: 200,
+					details: "details",
+					error: new Error("error"),
+					instance: "instance",
+					message: "message",
+					method: "method",
+					statusCode: 100
 				});
 			});
 
@@ -68,7 +70,7 @@ describe("error", function() {
 				const error=new Error();
 				error.stack="stack";
 				const instance=new ColonyError({error});
-				assert.equal(instance.stack, "stack");
+				assert.strictEqual(instance.stack, "stack");
 			});
 		});
 	});

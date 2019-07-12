@@ -129,5 +129,4 @@ describe("mutation.immutable.object", function() {
 			});
 		});
 	});
-
 });

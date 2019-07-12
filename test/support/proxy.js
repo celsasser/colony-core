@@ -14,19 +14,19 @@ const _props=[];
 
 /**
  * Stubs this method and at the same time adds him to our collection of stubs
- * accumulated since the last call to exports.unstub()
+ * accumulated since the last call to unstub()
  * @param {Object} object
  * @param {string} method
  * @param {Function} handler
  * @returns {wrapMethod}
  */
-exports.stub=function(object, method, handler) {
+function stub(object, method, handler) {
 	// we are not fancy. If he's already stubbed then get rid of it.
-	exports.unstub([object[method]]);
+	unstub([object[method]]);
 	const stub=sinon.stub(object, method).callsFake(handler);
 	_stubs.push(stub);
 	return stub;
-};
+}
 
 /**
  * Does everything <code>stub</code> does but wraps the handler in a try catch so that exceptions
@@ -36,37 +36,37 @@ exports.stub=function(object, method, handler) {
  * @param {function(...args, callback)} handler - function who's last param will be a callback method
  * @returns {wrapMethod}
  */
-exports.stubCallback=function(object, method, handler) {
-	return exports.stub(object, method, (...args)=>{
+function stubCallback(object, method, handler) {
+	return stub(object, method, (...args)=>{
 		try {
 			handler(...args);
 		} catch(error) {
 			_.last(args)(error);
 		}
 	});
-};
+}
 
 /**
  * Spies on the specified method and at the same time adds him to our collection of stubs
- * accumulated since the last call to exports.unstub()
+ * accumulated since the last call to unstub()
  * @param {Object} object
  * @param {string} method
  * @returns {wrapMethod}
  */
-exports.spy=function(object, method) {
+function spy(object, method) {
 	// unstub him if he's already being spied on.
-	exports.unstub([object[method]]);
+	unstub([object[method]]);
 	const spy=sinon.spy(object, method);
 	_stubs.push(spy);
 	return spy;
-};
+}
 
 /**
  * Unstub methods in functions if they are stubbed.  Defaults to unstub all
- * methods currently being tracked by methods stubbed with exports.stub
- * @param {Array} functions if undefined then unstubs all stubs added via exports.stub
+ * methods currently being tracked by methods stubbed with stub
+ * @param {Array} functions if undefined then unstubs all stubs added via stub
  */
-exports.unstub=function(functions=undefined) {
+function unstub(functions=undefined) {
 	if(functions==null) {
 		functions=_stubs;
 		_stubs=[];
@@ -76,7 +76,7 @@ exports.unstub=function(functions=undefined) {
 			fnction.restore();
 		}
 	});
-};
+}
 
 /**
  * Sets value for object[name] and retains the original value
@@ -84,7 +84,7 @@ exports.unstub=function(functions=undefined) {
  * @param {string} name
  * @param {*} value
  */
-exports.setProperty=function(object, name, value) {
+function setProperty(object, name, value) {
 	let instance=_.find(_props, {name, object});
 	if(instance===undefined) {
 		_props.push((instance={
@@ -96,14 +96,14 @@ exports.setProperty=function(object, name, value) {
 	}
 	instance.count++;
 	object[name]=value;
-};
+}
 
 /**
  * Restores original value if ref count is 0
  * @param {Object} object
  * @param {string} name
  */
-exports.restoreProperty=function(object, name) {
+function restoreProperty(object, name) {
 	const instance=_.find(_props, {name, object});
 	assert.notStrictEqual(instance, undefined);
 	assert.true(instance.count>0);
@@ -114,4 +114,13 @@ exports.restoreProperty=function(object, name) {
 			instance.object[instance.name]=instance.value;
 		}
 	}
+}
+
+module.exports={
+	restoreProperty,
+	setProperty,
+	spy,
+	stub,
+	stubCallback,
+	unstub
 };

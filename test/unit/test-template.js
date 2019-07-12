@@ -10,11 +10,11 @@ const template=require("../../lib/template");
 describe("template", function() {
 	it("should properly substitute variables in properly marked up template string", function() {
 		const _template="This is a {{noun}} of the {{adjective}} broadcast system";
-		assert.equal(template.render(_template, {
+		assert.strictEqual(template.render(_template, {
 			adjective: "emergency",
 			noun: "test"
 		}), "This is a test of the emergency broadcast system");
-		assert.equal(template.render(_template, {
+		assert.strictEqual(template.render(_template, {
 			adjective: "fuzzy",
 			noun: "cat"
 		}), "This is a cat of the fuzzy broadcast system");
@@ -22,7 +22,7 @@ describe("template", function() {
 
 	it("should properly substitute side by side variables", function() {
 		const _template="{{a}}{{b}}";
-		assert.equal(template.render(_template, {
+		assert.strictEqual(template.render(_template, {
 			a: "one",
 			b: "two"
 		}), "onetwo");
