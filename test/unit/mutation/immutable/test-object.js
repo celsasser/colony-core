@@ -4,8 +4,8 @@
  * @license MIT (see project's LICENSE file)
  */
 
-const assert=require("../../../support/assert");
-const proxy=require("../../../support/proxy");
+const assert=require("colony-test").assert;
+const proxy=require("colony-test").proxy;
 const immutable=require("../../../../lib/mutation").immutable;
 const mutable=require("../../../../lib/mutation").mutable;
 

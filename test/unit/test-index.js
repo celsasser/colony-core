@@ -5,7 +5,7 @@
  */
 
 const _=require("lodash");
-const assert=require("../support/assert");
+const assert=require("colony-test").assert;
 const index=require("../../lib/index");
 
 describe("index", function() {

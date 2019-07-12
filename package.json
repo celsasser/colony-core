@@ -6,11 +6,12 @@
 	"main": "lib/index.js",
 	"name": "colony-core",
 	"readmeFilename": "README.md",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"dependencies": {
 		"lodash": "4.17.14"
 	},
 	"devDependencies": {
+		"colony-test": "1.0.1",
 		"eslint": "6.0.1",
 		"mocha": "6.1.4",
 		"pig-quality": "1.0.1",

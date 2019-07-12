@@ -3,7 +3,7 @@
  * Time: 7:15 PM
  */
 
-const assert=require("../support/assert");
+const assert=require("colony-test").assert;
 const {
 	addDays,
 	addHours,

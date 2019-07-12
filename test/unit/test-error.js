@@ -4,7 +4,7 @@
  */
 
 const _=require("lodash");
-const assert=require("../support/assert");
+const assert=require("colony-test").assert;
 const {ColonyError}=require("../../lib/error");
 
 describe("error", function() {

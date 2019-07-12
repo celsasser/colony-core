@@ -4,7 +4,7 @@
  * @license MIT (see project's LICENSE file)
  */
 
-const assert=require("../../../support/assert");
+const assert=require("colony-test").assert;
 const array=require("../../../../lib/mutation").immutable.array;
 
 
