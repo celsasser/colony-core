@@ -47,16 +47,19 @@ describe("log.LogBase", function() {
 				proxy.stub(log, "_processEntry", function(message, {
 					metadata,
 					moduleId,
-					severity
+					severity,
+					traceId
 				}) {
 					assert.strictEqual(message, "message");
 					assert.strictEqual(metadata, "metadata");
 					assert.strictEqual(moduleId, "moduleId");
 					assert.strictEqual(severity, _severity);
+					assert.strictEqual(traceId, "traceId");
 				});
 				log[method]("message", {
 					metadata: "metadata",
-					moduleId: "moduleId"
+					moduleId: "moduleId",
+					traceId: "traceId"
 				});
 				assert.strictEqual(log._processEntry.callCount, 1);
 			});
@@ -85,12 +88,14 @@ describe("log.LogBase", function() {
 						environmentId: "environmentId",
 						moduleId: "moduleId",
 						severity,
-						timestamp
+						timestamp,
+						traceId: "traceId"
 					});
 				});
 				log._processEntry("message", {
 					moduleId: "moduleId",
-					severity
+					severity,
+					traceId: "traceId"
 				});
 				assert.strictEqual(log._logEntry.callCount, 1);
 			});
