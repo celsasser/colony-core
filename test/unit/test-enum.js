@@ -22,13 +22,13 @@ describe("enum", function() {
 	});
 
 	describe("severity", function() {
-		describe("trips", function() {
+		describe("test", function() {
 			it("should properly evaluate values", function() {
-				assert.strictEqual(severity.trips(severity.enum.DEBUG, severity.enum.WARN), false);
-				assert.strictEqual(severity.trips(severity.enum.INFO, severity.enum.WARN), false);
-				assert.strictEqual(severity.trips(severity.enum.WARN, severity.enum.WARN), true);
-				assert.strictEqual(severity.trips(severity.enum.ERROR, severity.enum.WARN), true);
-				assert.strictEqual(severity.trips(severity.enum.FATAL, severity.enum.WARN), true);
+				assert.strictEqual(severity.test(severity.enum.DEBUG, severity.enum.WARN), false);
+				assert.strictEqual(severity.test(severity.enum.INFO, severity.enum.WARN), false);
+				assert.strictEqual(severity.test(severity.enum.WARN, severity.enum.WARN), true);
+				assert.strictEqual(severity.test(severity.enum.ERROR, severity.enum.WARN), true);
+				assert.strictEqual(severity.test(severity.enum.FATAL, severity.enum.WARN), true);
 			});
 		});
 	});

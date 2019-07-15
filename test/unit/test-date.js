@@ -5,11 +5,7 @@
 
 const assert=require("colony-test").assert;
 const {
-	addDays,
-	addHours,
-	addMillis,
-	addMinutes,
-	addSeconds,
+	add,
 	fromString,
 	fromValue,
 	isEqual,
@@ -18,29 +14,86 @@ const {
 
 
 describe("date", function() {
-	it("addMillis should properly add 10 millis to current date", function() {
-		const date=new Date();
-		assert.strictEqual(addMillis(date, 10).getTime(), new Date(date.getTime()+10).getTime());
-	});
+	describe("add", function() {
+		it("should return date if no additions are made", function() {
+			const date=new Date(),
+				result=add(date, {});
+			assert.strictEqual(date.getTime(), result.getTime());
+		});
 
-	it("addSeconds should properly add 10 seconds to current date", function() {
-		const date=new Date();
-		assert.strictEqual(addSeconds(date, 10).getTime(), new Date(date.getTime()+10*1000).getTime());
-	});
+		it("should properly add positive millis", function() {
+			const date=new Date(),
+				result=add(date, {
+					millis: 100
+				});
+			assert.strictEqual(date.getTime(), result.getTime()-100);
+		});
 
-	it("addMinutes should properly add 10 minutes to current date", function() {
-		const date=new Date();
-		assert.strictEqual(addMinutes(date, 10).getTime(), new Date(date.getTime()+10*60*1000).getTime());
-	});
+		it("should properly add negative millis", function() {
+			const date=new Date(),
+				result=add(date, {
+					millis: -100
+				});
+			assert.strictEqual(date.getTime(), result.getTime()+100);
+		});
 
-	it("addHours should properly add 10 hourse to current date", function() {
-		const date=new Date();
-		assert.strictEqual(addHours(date, 10).getTime(), new Date(date.getTime()+10*60*60*1000).getTime());
-	});
+		it("should properly add positive seconds", function() {
+			const date=new Date(),
+				result=add(date, {
+					seconds: 1
+				});
+			assert.strictEqual(date.getTime(), result.getTime()-1000);
+		});
 
-	it("addDays should properly add 10 days to current date", function() {
-		const date=new Date();
-		assert.strictEqual(addDays(date, 10).getTime(), new Date(date.getTime()+10*24*60*60*1000).getTime());
+		it("should properly add negative seconds", function() {
+			const date=new Date(),
+				result=add(date, {
+					seconds: -1
+				});
+			assert.strictEqual(date.getTime(), result.getTime()+1000);
+		});
+
+		it("should properly add minutes", function() {
+			const date=new Date(),
+				result=add(date, {
+					minutes: 1
+				});
+			assert.strictEqual(date.getTime(), result.getTime()-1000*60);
+		});
+
+		it("should properly add hours", function() {
+			const date=new Date(),
+				result=add(date, {
+					hours: 1
+				});
+			assert.strictEqual(date.getTime(), result.getTime()-1000*60*60);
+		});
+
+		it("should properly add days", function() {
+			const date=new Date(),
+				result=add(date, {
+					days: 1
+				});
+			assert.strictEqual(date.getTime(), result.getTime()-1000*60*60*24);
+		});
+
+		it("should properly add combination of all params", function() {
+			const date=new Date(),
+				result=add(date, {
+					millis: 1,
+					seconds: 1,
+					minutes: 1,
+					hours: 1,
+					days: 1
+				});
+			assert.strictEqual(date.getTime(), result.getTime()
+				-1
+				-1000
+				-1000*60
+				-1000*60*60
+				-1000*60*60*24
+			);
+		});
 	});
 
 	describe("isEqual", function() {
@@ -54,6 +107,13 @@ describe("date", function() {
 			const date1=new Date("2000-01-01T12:00:00.000Z"),
 				date2=new Date("2001-01-01T12:00:00.000Z");
 			assert.strictEqual(isEqual(date1, date2), false);
+		});
+
+		it("should handle null and undefined values", function() {
+			assert.strictEqual(isEqual(undefined, undefined), true);
+			assert.strictEqual(isEqual(null, null), true);
+			assert.strictEqual(isEqual(new Date(), null), false);
+			assert.strictEqual(isEqual(null, new Date()), false);
 		});
 	});
 
