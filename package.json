@@ -12,7 +12,7 @@
 		"shortid": "2.2.14"
 	},
 	"devDependencies": {
-		"colony-test": "^1.0.2",
+		"colony-test": "^1.2.0",
 		"eslint": "6.0.1",
 		"mocha": "6.1.4",
 		"pig-quality": "^1.0.1",
