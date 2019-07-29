@@ -3,7 +3,6 @@
  * Time: 10:08 PM
  * @license MIT (see project's LICENSE file)
  *
- * @module colony-core/format
  */
 
 const diagnostics=require("./diagnostics");

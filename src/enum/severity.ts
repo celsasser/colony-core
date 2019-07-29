@@ -5,7 +5,7 @@
  */
 
 
-const order=[
+const order = [
 	"debug",
 	"info",
 	"warn",
@@ -13,29 +13,17 @@ const order=[
 	"fatal"
 ];
 
-/**
- * Should by in parity with <code>ColonySeverity</code>
- */
-const severity={
-	DEBUG: "debug",
-	INFO: "info",
-	WARN: "warn",
-	ERROR: "error",
-	FATAL: "fatal"
-};
+export enum Severity {
+	DEBUG = "debug",
+	INFO = "info",
+	WARN = "warn",
+	ERROR = "error",
+	FATAL = "fatal"
+}
 
 /**
  * Is the <param>severity</param> param greater than or equal to the <param>threshold</param> param
- * @param {ColonySeverity} value
- * @param {ColonySeverity} threshold
- * @returns {boolean}
  */
-function test(value, threshold) {
-	return order.indexOf(value)>=order.indexOf(threshold);
+export function testSeverity(value:Severity, threshold:Severity):boolean {
+	return order.indexOf(value) >= order.indexOf(threshold);
 }
-
-module.exports={
-	enum: severity,
-	order,
-	test
-};

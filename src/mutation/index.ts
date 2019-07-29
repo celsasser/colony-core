@@ -3,7 +3,6 @@
  * Time: 8:23 PM
  * @license MIT (see project's LICENSE file)
  *
- * @module colony-core/mutation
  */
 
 

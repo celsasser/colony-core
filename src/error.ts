@@ -3,7 +3,6 @@
  * Time: 9:48 PM
  * @license MIT (see project's LICENSE file)
  *
- * @module colony-core/error
  */
 
 const _=require("lodash");

@@ -2,7 +2,6 @@
  * Date: 3/5/2018
  * Time: 9:10 PM
  *
- * @module colony-core/type
  */
 
 /**

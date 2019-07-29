@@ -5,15 +5,8 @@
  */
 
 
-/**
- * Should by in parity with <code>ColonyPriority</code>
- */
-const priority={
-	LOW: "low",
-	MEDIUM: "medium",
-	HIGH: "high"
-};
-
-module.exports={
-	enum: priority
-};
+export enum Priority {
+	LOW = "low",
+	MEDIUM = "medium",
+	HIGH = "high"
+}

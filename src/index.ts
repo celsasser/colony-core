@@ -3,7 +3,6 @@
  * Time: 2:15 PM
  * @license MIT (see project's LICENSE file)
  *
- * @module colony-core
  */
 
 const storage={

@@ -3,7 +3,6 @@
  * Time: 13:42
  * @license MIT (see project's LICENSE file)
  *
- * @module pig-core/urn
  */
 
 const shortid=require("shortid");

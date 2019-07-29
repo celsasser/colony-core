@@ -7,7 +7,7 @@
 		/* Redirect output structure to the directory. */
 		"outDir": "./dist",
 		/* Do not generate javascript on errors. */
-		"noEmitOnError": true,
+		"noEmitOnError": false,
 		/* Raise error on expressions and declarations with an implied 'any' type. */
 		"noImplicitAny": true,
 		/* Report error when not all code paths in function return a value. */

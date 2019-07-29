@@ -3,7 +3,6 @@
  * Time: 9:10 PM
  * @license MIT (see project's LICENSE file)
  *
- * @module colony-core/compare
  */
 
 const _=require("lodash");
