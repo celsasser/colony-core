@@ -4,13 +4,25 @@
  * @license MIT (see project's LICENSE file)
  *
  */
+import {
+	Severity,
+	testSeverity
+} from "./enum";
 
-const _=require("lodash");
-const {
-	enum: severityEnum,
-	test: severityTest
-}=require("./enum/severity");
-const immutable=require("./mutation").immutable;
+import * as _ from "lodash";
+const immutable = require("./mutation").immutable;
+
+
+export type LogEntryMetadata = {
+	applicationId:string,
+	environmentId:string,
+	metadata?:{[index:string]:any},
+	moduleId:string,
+	severity:Severity,
+	timestamp:Date
+};
+
+type Message = string|(() => string);
 
 
 /**
@@ -18,7 +30,12 @@ const immutable=require("./mutation").immutable;
  * platform. The idea is that this class encapsulates the broad strokes. There will be override points and
  * they will clearly be labelled
  */
-class LogBase {
+abstract class LogBase {
+	public readonly applicationId:string;
+	public readonly environmentId:string;
+	public readonly sortMetadata:boolean;
+	public readonly threshold:Severity;
+
 	/**
 	 * @param {string} applicationId
 	 * @param {string} environmentId
@@ -28,13 +45,13 @@ class LogBase {
 	constructor({
 		applicationId,
 		environmentId,
-		sortMetadata=true,
-		threshold=undefined
+		sortMetadata = true,
+		threshold = undefined
 	}) {
-		this.applicationId=applicationId;
-		this.environmentId=environmentId;
-		this.sortMetadata=sortMetadata;
-		this.threshold=threshold;
+		this.applicationId = applicationId;
+		this.environmentId = environmentId;
+		this.sortMetadata = sortMetadata;
+		this.threshold = threshold;
 	}
 
 	/********************* Public Interface *********************/
@@ -44,15 +61,15 @@ class LogBase {
 	 * @param {string} moduleId
 	 * @param {string|undefined} traceId
 	 */
-	debug(message, {
-		metadata=undefined,
+	debug(message:Message, {
+		metadata = undefined,
 		moduleId,
-		traceId=undefined
+		traceId = undefined
 	}) {
 		this._processEntry(message, {
 			metadata,
 			moduleId,
-			severity: severityEnum.DEBUG,
+			severity: Severity.DEBUG,
 			traceId
 		});
 	}
@@ -63,15 +80,15 @@ class LogBase {
 	 * @param {string} moduleId
 	 * @param {string|undefined} traceId
 	 */
-	error(message, {
-		metadata=undefined,
+	error(message:Message, {
+		metadata = undefined,
 		moduleId,
-		traceId=undefined
+		traceId = undefined
 	}) {
 		this._processEntry(message, {
 			metadata,
 			moduleId,
-			severity: severityEnum.ERROR,
+			severity: Severity.ERROR,
 			traceId
 		});
 	}
@@ -82,15 +99,15 @@ class LogBase {
 	 * @param {string} moduleId
 	 * @param {string|undefined} traceId
 	 */
-	fatal(message, {
-		metadata=undefined,
+	fatal(message:Message, {
+		metadata = undefined,
 		moduleId,
-		traceId=undefined
+		traceId = undefined
 	}) {
 		this._processEntry(message, {
 			metadata,
 			moduleId,
-			severity: severityEnum.FATAL,
+			severity: Severity.FATAL,
 			traceId
 		});
 	}
@@ -101,15 +118,15 @@ class LogBase {
 	 * @param {string} moduleId
 	 * @param {string|undefined} traceId
 	 */
-	info(message, {
-		metadata=undefined,
+	info(message:Message, {
+		metadata = undefined,
 		moduleId,
-		traceId=undefined
+		traceId = undefined
 	}) {
 		this._processEntry(message, {
 			metadata,
 			moduleId,
-			severity: severityEnum.INFO,
+			severity: Severity.INFO,
 			traceId
 		});
 	}
@@ -120,15 +137,15 @@ class LogBase {
 	 * @param {string} moduleId
 	 * @param {string|undefined} traceId
 	 */
-	warn(message, {
-		metadata=undefined,
+	warn(message:Message, {
+		metadata = undefined,
 		moduleId,
-		traceId=undefined
+		traceId = undefined
 	}) {
 		this._processEntry(message, {
 			metadata,
 			moduleId,
-			severity: severityEnum.WARN,
+			severity: Severity.WARN,
 			traceId
 		});
 	}
@@ -136,32 +153,27 @@ class LogBase {
 	/********************* Protected Interface *********************/
 	/**
 	 * Derived classes should implement this method
-	 * @param {string} message
-	 * @param {LogEntryMetadata} metadata
-	 * @protected
-	 * @override
 	 */
-	_logEntry(message, metadata) {
-	}
+	protected abstract _logEntry(message:string, metadata:LogEntryMetadata):void;
 
 	/********************* Private Interface *********************/
 	/**
 	 * @param {string|function():string} message
 	 * @param {Object} metadata
 	 * @param {string} moduleId
-	 * @param {ColonySeverity} severity
+	 * @param {Severity} severity
 	 * @param {string|undefined} traceId
 	 * @private
 	 */
-	_processEntry(message, {
+	private _processEntry(message:Message, {
 		metadata,
 		moduleId,
 		severity,
 		traceId
 	}) {
-		if(this.threshold===undefined || severityTest(severity, this.threshold)) {
+		if(this.threshold === undefined || testSeverity(severity, this.threshold)) {
 			if(_.isFunction(message)) {
-				message=message();
+				message = message();
 			}
 			this._logEntry(message, _.omitBy({
 				applicationId: this.applicationId,
@@ -178,7 +190,7 @@ class LogBase {
 	}
 }
 
-module.exports={
+module.exports = {
 	LogBase
 };
 
