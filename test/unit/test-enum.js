@@ -8,7 +8,7 @@ const assert=require("assert");
 const {
 	isValid,
 	severity
-}=require("../../lib/enum");
+}=require("../../dist/enum");
 
 describe("enum", function() {
 	describe("isValid", function() {

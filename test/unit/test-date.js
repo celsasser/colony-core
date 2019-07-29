@@ -10,7 +10,7 @@ const {
 	fromValue,
 	isEqual,
 	toISOString
-}=require("../../lib/date");
+}=require("../../dist/date");
 
 
 describe("date", function() {

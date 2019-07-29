@@ -5,7 +5,7 @@
  */
 
 const assert=require("colony-test").assert;
-const urn=require("../../lib/urn");
+const urn=require("../../dist/urn");
 
 describe("urn", function() {
 	describe("create", function() {

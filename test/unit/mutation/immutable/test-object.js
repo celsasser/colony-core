@@ -6,8 +6,8 @@
 
 const assert=require("colony-test").assert;
 const proxy=require("colony-test").proxy;
-const immutable=require("../../../../lib/mutation").immutable;
-const mutable=require("../../../../lib/mutation").mutable;
+const immutable=require("../../../../dist/mutation").immutable;
+const mutable=require("../../../../dist/mutation").mutable;
 
 
 describe("mutation.immutable.object", function() {

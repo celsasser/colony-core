@@ -4,7 +4,7 @@
  */
 
 const assert=require("assert");
-const type=require("../../lib/type");
+const type=require("../../dist/type");
 
 
 describe("type", function() {

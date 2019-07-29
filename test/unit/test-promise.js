@@ -6,7 +6,7 @@
 
 const _=require("lodash");
 const assert=require("colony-test").assert;
-const promise=require("../../lib/promise");
+const promise=require("../../dist/promise");
 
 describe("promise", function() {
 	describe("rejectNextTick", function() {

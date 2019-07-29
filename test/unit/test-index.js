@@ -6,7 +6,7 @@
 
 const _=require("lodash");
 const assert=require("colony-test").assert;
-const index=require("../../lib/index");
+const index=require("../../dist/index");
 
 describe("index", function() {
 	it("should properly import each public module", function() {

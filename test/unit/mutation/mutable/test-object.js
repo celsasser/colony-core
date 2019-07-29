@@ -5,7 +5,7 @@
  */
 
 const assert=require("colony-test").assert;
-const object=require("../../../../lib/mutation").mutable.object;
+const object=require("../../../../dist/mutation").mutable.object;
 
 
 describe("mutation.mutable.object", function() {

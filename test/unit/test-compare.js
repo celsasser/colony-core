@@ -4,7 +4,7 @@
  */
 
 const assert=require("colony-test").assert;
-const compare=require("../../lib/compare");
+const compare=require("../../dist/compare");
 
 
 describe("compare", function() {

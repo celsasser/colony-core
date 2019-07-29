@@ -6,10 +6,10 @@
 
 const assert=require("colony-test").assert;
 const proxy=require("colony-test").proxy;
-const severity=require("../../lib/enum/severity");
+const severity=require("../../dist/enum/severity");
 const {
 	LogBase
-}=require("../../lib/log");
+}=require("../../dist/log");
 
 describe("log.LogBase", function() {
 	afterEach(function() {
