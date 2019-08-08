@@ -4,12 +4,14 @@
  * @license MIT (see project's LICENSE file)
  *
  */
+
+import * as _ from "lodash";
 import {
 	Severity,
 	testSeverity
 } from "./enum";
 
-import * as _ from "lodash";
+
 const immutable = require("./mutation").immutable;
 
 
@@ -36,17 +38,16 @@ abstract class LogBase {
 	public readonly sortMetadata:boolean;
 	public readonly threshold:Severity;
 
-	/**
-	 * @param {string} applicationId
-	 * @param {string} environmentId
-	 * @param {boolean} sortMetadata - whether to sort the properties of metadata or not
-	 * @param {ColonySeverity} threshold - if included then messages will be filtered locally by this threshold. If not then no local filtering will be applied.
-	 */
 	constructor({
 		applicationId,
 		environmentId,
 		sortMetadata = true,
-		threshold = undefined
+		threshold = Severity.INFO
+	}:{
+		applicationId:string,
+		environmentId:string,
+		sortMetadata:boolean,
+		threshold:Severity
 	}) {
 		this.applicationId = applicationId;
 		this.environmentId = environmentId;
@@ -55,16 +56,14 @@ abstract class LogBase {
 	}
 
 	/********************* Public Interface *********************/
-	/**
-	 * @param {string|function():string} message
-	 * @param {Object|undefined} metadata
-	 * @param {string} moduleId
-	 * @param {string|undefined} traceId
-	 */
-	debug(message:Message, {
+	public debug(message:Message, {
 		metadata = undefined,
 		moduleId,
 		traceId = undefined
+	}: {
+		metadata?:{[index:string]:any},
+		moduleId:string,
+		traceId?:string
 	}) {
 		this._processEntry(message, {
 			metadata,
@@ -74,16 +73,14 @@ abstract class LogBase {
 		});
 	}
 
-	/**
-	 * @param {string|function():string} message
-	 * @param {Object|undefined} metadata
-	 * @param {string} moduleId
-	 * @param {string|undefined} traceId
-	 */
-	error(message:Message, {
+	public error(message:Message, {
 		metadata = undefined,
 		moduleId,
 		traceId = undefined
+	}: {
+		metadata?:{[index:string]:any},
+		moduleId:string,
+		traceId?:string
 	}) {
 		this._processEntry(message, {
 			metadata,
@@ -93,16 +90,14 @@ abstract class LogBase {
 		});
 	}
 
-	/**
-	 * @param {string|function():string} message
-	 * @param {Object|undefined} metadata
-	 * @param {string} moduleId
-	 * @param {string|undefined} traceId
-	 */
-	fatal(message:Message, {
+	public fatal(message:Message, {
 		metadata = undefined,
 		moduleId,
 		traceId = undefined
+	}: {
+		metadata?:{[index:string]:any},
+		moduleId:string,
+		traceId?:string
 	}) {
 		this._processEntry(message, {
 			metadata,
@@ -112,16 +107,14 @@ abstract class LogBase {
 		});
 	}
 
-	/**
-	 * @param {string|function():string} message
-	 * @param {Object|undefined} metadata
-	 * @param {string} moduleId
-	 * @param {string|undefined} traceId
-	 */
-	info(message:Message, {
+	public info(message:Message, {
 		metadata = undefined,
 		moduleId,
 		traceId = undefined
+	}: {
+		metadata?:{[index:string]:any},
+		moduleId:string,
+		traceId?:string
 	}) {
 		this._processEntry(message, {
 			metadata,
@@ -131,16 +124,14 @@ abstract class LogBase {
 		});
 	}
 
-	/**
-	 * @param {string|function():string} message
-	 * @param {Object|undefined} metadata
-	 * @param {string} moduleId
-	 * @param {string|undefined} traceId
-	 */
-	warn(message:Message, {
+	public warn(message:Message, {
 		metadata = undefined,
 		moduleId,
 		traceId = undefined
+	}: {
+		metadata?:{[index:string]:any},
+		moduleId:string,
+		traceId?:string
 	}) {
 		this._processEntry(message, {
 			metadata,
@@ -154,7 +145,7 @@ abstract class LogBase {
 	/**
 	 * Derived classes should implement this method
 	 */
-	protected abstract _logEntry(message:string, metadata:LogEntryMetadata):void;
+	protected abstract _logEntry(message:string, metadata:{[index:string]:any}):void;
 
 	/********************* Private Interface *********************/
 	/**
@@ -170,8 +161,13 @@ abstract class LogBase {
 		moduleId,
 		severity,
 		traceId
+	}: {
+		metadata?:{[index:string]:any},
+		moduleId:string,
+		severity:Severity,
+		traceId?:string
 	}) {
-		if(this.threshold === undefined || testSeverity(severity, this.threshold)) {
+		if(testSeverity(severity, this.threshold)) {
 			if(_.isFunction(message)) {
 				message = message();
 			}

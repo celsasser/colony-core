@@ -9,21 +9,20 @@ const _=require("lodash");
 
 /**
  * Offsets <param>data</param>
- * @param {Date} date
- * @param {number=0} days
- * @param {number=0} hours
- * @param {number=0} millis
- * @param {number=0} minutes
- * @param {number=0} seconds
- * @returns {Date}
  */
-function add(date, {
+export function add(date:Date, {
 	days=0,
 	hours=0,
 	millis=0,
 	minutes=0,
 	seconds=0
-}) {
+}: {
+	days:number,
+	hours:number,
+	millis:number,
+	minutes:number,
+	seconds:number
+} = {}):Date {
 	const offset=millis
 		+ seconds*1000
 		+ minutes*1000*60
@@ -34,11 +33,8 @@ function add(date, {
 
 /**
  * Safely compares dates
- * @param {Date} date1
- * @param {Date} date2
- * @return {boolean}
  */
-function isEqual(date1, date2) {
+export function isEqual(date1:Date, date2:Date):boolean {
 	if(date1===date2) {
 		return true;
 	} else if(date1 && date2) {
@@ -51,11 +47,9 @@ function isEqual(date1, date2) {
 
 /**
  * Does all he can to convert a string into a date object
- * @param {string} text
- * @returns {Date|null}
  * @throws {Error}
  */
-function fromString(text) {
+export function fromString(text:string):Date|null {
 	let result=null;
 	if(_.isEmpty(text)===false) {
 		result=Date.parse(text);
@@ -74,15 +68,15 @@ function fromString(text) {
  * @returns {Date|null}
  * @throws {Error}
  */
-function fromValue(value) {
+export function fromValue(value?:Date|number|string):Date|null {
 	if(value==null) {
 		return null;
+	} else if(typeof value === "string") {
+		return fromString(value);
+	} else if(typeof value === "number") {
+		return new Date(value);
 	} else if(_.isDate(value)) {
 		return value;
-	} else if(_.isString(value)) {
-		return fromString(value);
-	} else if(_.isNumber(value)) {
-		return new Date(value);
 	}
 	throw new Error(`unknown date value ${value}`);
 }
@@ -94,17 +88,9 @@ function fromValue(value) {
  * @param {boolean} millis true to include them or false or undefined to eliminate them
  * @returns {string}
  */
-function toISOString(date, millis=true) {
+export function toISOString(date:Date, millis:boolean=true):string {
 	const result=date.toISOString();
 	return (millis)
 		? result
 		: result.replace(/\.\d+Z$/, "Z");
 }
-
-module.exports={
-	add,
-	isEqual,
-	fromString,
-	fromValue,
-	toISOString
-};
