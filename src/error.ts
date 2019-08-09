@@ -5,30 +5,32 @@
  *
  */
 
-const _=require("lodash");
-const http=require("./enum/http");
+import * as _ from "lodash";
+import {
+	HttpStatusText,
+	HttpStatusCode
+} from "./enum/http";
 
 // note: be careful including relative dependencies in here as it has far reaches
 
 
 /**
  * Custom Error type that supports some "smart" constructors. And some property annotation support
- * @typedef {Error} ColonyError
  */
-class ColonyError extends Error {
+export class ColonyError extends Error {
 	/**
 	 * General purpose pig error that hold all of our secrets.  He is designed to stash information
 	 * related to the error so that we capture and report relevant info.  You may specify a number
 	 * of predefined params and include additional ones.  You must supply something that constitutes
 	 * a "message".  This can come from "message", "error", "code" or "instance"...though instance
 	 * probably does not make for a very good message.
-	 * @param {string} details - details in addition to the principle error or message
-	 * @param {Error} error - error that will be promoted to "message" or "details" if they are not specified.
-	 * @param {Object|string} instance - instance of object in which the error occurred
-	 * @param {string} message
-	 * @param {string} method - calling method
-	 * @param {number} statusCode - http code to associate with error. See <link>./enum/http.js</link> for enums
-	 * @param {...*} properties - additional properties that you want captured and logged.
+	 * @param details - details in addition to the principle error or message
+	 * @param error - error that will be promoted to "message" or "details" if they are not specified.
+	 * @param instance - instance of object in which the error occurred
+	 * @param message
+	 * @param method - calling method
+	 * @param statusCode - http code to associate with error. See <link>./enum/http.js</link> for enums
+	 * @param properties - additional properties that you want captured and logged.
 	 */
 	constructor({
 		details=undefined,
@@ -38,9 +40,16 @@ class ColonyError extends Error {
 		method=undefined,
 		statusCode=undefined,
 		...properties
+	}: {
+		details?: string,
+		error?: ColonyError|Error|string,
+		instance?: {[index:string]:any}|string,
+		message?: string,
+		method?: string,
+		statusCode?: HttpStatusCode
 	}) {
 		const leftovers=Object.assign({}, arguments[0]),
-			getMostImportant=function(preferredPropery) {
+			getMostImportant=function(preferredPropery: string) {
 				let result;
 				if(leftovers[preferredPropery]) {
 					result=leftovers[preferredPropery];
@@ -49,7 +58,7 @@ class ColonyError extends Error {
 					result=leftovers.error.message;
 					delete leftovers.error;
 				} else if(leftovers.statusCode) {
-					result=`${http.statusText[leftovers.statusCode]} (${leftovers.statusCode})`;
+					result=`${HttpStatusText[leftovers.statusCode]} (${leftovers.statusCode})`;
 					delete leftovers.statusCode;
 				}
 				return result;
@@ -76,5 +85,3 @@ class ColonyError extends Error {
 		}, _.isUndefined));
 	}
 }
-
-module.exports.ColonyError=ColonyError;

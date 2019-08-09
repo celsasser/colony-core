@@ -5,40 +5,40 @@
  *
  */
 
-const _=require("lodash");
+import * as _ from "lodash";
 
 /**
  * Offsets <param>data</param>
  */
-export function add(date:Date, {
-	days=0,
-	hours=0,
-	millis=0,
-	minutes=0,
-	seconds=0
+export function add(date: Date, {
+	days = 0,
+	hours = 0,
+	millis = 0,
+	minutes = 0,
+	seconds = 0
 }: {
-	days:number,
-	hours:number,
-	millis:number,
-	minutes:number,
-	seconds:number
-} = {}):Date {
-	const offset=millis
-		+ seconds*1000
-		+ minutes*1000*60
-		+ hours*1000*60*60
-		+ days*1000*60*60*24;
-	return new Date(date.getTime()+offset);
+	days: number,
+	hours: number,
+	millis: number,
+	minutes: number,
+	seconds: number
+}): Date {
+	const offset = millis
+		+ seconds * 1000
+		+ minutes * 1000 * 60
+		+ hours * 1000 * 60 * 60
+		+ days * 1000 * 60 * 60 * 24;
+	return new Date(date.getTime() + offset);
 }
 
 /**
  * Safely compares dates
  */
-export function isEqual(date1:Date, date2:Date):boolean {
-	if(date1===date2) {
+export function isEqual(date1: Date, date2: Date): boolean {
+	if(date1 === date2) {
 		return true;
 	} else if(date1 && date2) {
-		return date1.getTime()===date2.getTime();
+		return date1.getTime() === date2.getTime();
 	} else {
 		return false;
 	}
@@ -49,12 +49,12 @@ export function isEqual(date1:Date, date2:Date):boolean {
  * Does all he can to convert a string into a date object
  * @throws {Error}
  */
-export function fromString(text:string):Date|null {
-	let result=null;
-	if(_.isEmpty(text)===false) {
-		result=Date.parse(text);
-		if(isNaN(result)===false) {
-			result=new Date(result);
+export function fromString(text: string): Date|null {
+	let result = null;
+	if(_.isEmpty(text) === false) {
+		result = Date.parse(text);
+		if(isNaN(result) === false) {
+			result = new Date(result);
 		} else {
 			throw new Error(`invalid date ${text}`);
 		}
@@ -64,12 +64,10 @@ export function fromString(text:string):Date|null {
 
 /**
  * Looks for the various known flavors of a date: Date, String, Number (assumes epoch)
- * @param {Date|Number|String} value
- * @returns {Date|null}
  * @throws {Error}
  */
-export function fromValue(value?:Date|number|string):Date|null {
-	if(value==null) {
+export function fromValue(value?: Date|number|string): Date|null {
+	if(value == null) {
 		return null;
 	} else if(typeof value === "string") {
 		return fromString(value);
@@ -84,12 +82,9 @@ export function fromValue(value?:Date|number|string):Date|null {
 
 /**
  * Allows support for older encodings without millis
- * @param {Date} date
- * @param {boolean} millis true to include them or false or undefined to eliminate them
- * @returns {string}
  */
-export function toISOString(date:Date, millis:boolean=true):string {
-	const result=date.toISOString();
+export function toISOString(date: Date, millis: boolean = true): string {
+	const result = date.toISOString();
 	return (millis)
 		? result
 		: result.replace(/\.\d+Z$/, "Z");

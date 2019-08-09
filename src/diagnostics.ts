@@ -8,38 +8,33 @@
 
 /**
  * Gets the current execution stack
- * @param {Object} options
- * @param {number} [options.popCount=0]
- * @param {number} [options.maxLines=10]
- * @returns {string}
  */
-module.exports.getStack=function(options=undefined) {
-	options=Object.assign({
-		popCount: 0
-	}, options);
+export function getStack({
+	popCount = 0,
+	maxLines = 10
+} = {}): string {
 	// pop ourselves
-	options.popCount++;
-	return exports.groomStack(new Error().stack, options);
+	popCount++;
+	return groomStack(new Error().stack, {
+		maxLines,
+		popCount
+	});
 };
 
 /**
  * Grooms the textual stack
- * @param {string} stack
- * @param {number} popCount
- * @param {number} maxLines
- * @returns {string}
  */
-module.exports.groomStack=function(stack, {
-	popCount=0,
-	maxLines=10
-}={}) {
-	stack=(stack || "").split("\n");
-	if(popCount>0) {
-		stack.splice(0, popCount);
+export function groomStack(stack?: string, {
+	popCount = 0,
+	maxLines = 10
+} = {}): string {
+	const lines = (stack || "").split("\n");
+	if(popCount > 0) {
+		lines.splice(0, popCount);
 	}
-	if(maxLines<stack.length) {
-		stack.splice(maxLines);
+	if(maxLines < lines.length) {
+		lines.splice(maxLines);
 	}
-	return stack.join("\n");
+	return lines.join("\n");
 };
 
