@@ -8,7 +8,6 @@ import * as _compare from "./compare";
 import * as _date from "./date";
 import * as _diagnostics from "./diagnostics";
 import * as _format from "./format";
-import * as _mutation from "./mutation";
 import * as _promise from "./promise";
 import * as _template from "./template";
 import * as _type from "./type";
@@ -21,12 +20,15 @@ export * from "./enum";
  * We will assume global scope for all errors
  */
 export * from "./error";
+/**
+ * We want mutable and immutable to be accessible directly
+ */
+export * from "./mutation";
 
 export const compare = _compare;
 export const date = _date;
 export const diagnostics = _diagnostics;
 export const format = _format;
-export const mutation = _mutation;
 export const promise = _promise;
 export const template = _template;
 export const type = _type;

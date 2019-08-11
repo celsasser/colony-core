@@ -4,17 +4,13 @@
  * @license MIT (see project's LICENSE file)
  */
 
-const _=require("lodash");
+import * as _ from "lodash";
 
 /**
  * Deletes the object at the property path in <code>object</code>
- * @param {Object|Array|null} object
- * @param {string} path
- * @returns {Object|Array} same object passed as <param>object</object>
-
  */
-function deletePath(object, path) {
-	function _delete(_object, property) {
+export function deletePath(object: {[key: string]: any}, path: string): {[key: string]: any} {
+	function _delete(_object: {[key: string]: any}, property: string) {
 		let index;
 		if(_.isArray(_object) && !_.isNaN(index=Number(property))) {
 			_object.splice(index, 1);
@@ -38,12 +34,9 @@ function deletePath(object, path) {
  * A variation of lodash's set but only sets if the value is not set:
  * - if object is not set then it defaults to {}
  * - it returns the value at "path"
- * @param {Object|null} object
- * @param {string} path
- * @param {*} value
- * @returns {Object|string} same object passed as <param>object</object>
+ * @returns same object passed as <param>object</object>
  */
-function ensure(object, path, value) {
+export function ensure<T>(object: {[key: string]: any}, path: string, value: T): {[key: string]: any} {
 	if(!_.has(object, path)) {
 		_.set(object, path, value);
 	}
@@ -54,26 +47,26 @@ function ensure(object, path, value) {
  * Removes properties of objects with <param>removables</param>values. It does not remove <param>removables</param> from arrays
  * but it does recursively process array elements and should they be objects then it will scrub those objects.
  * Note: must be careful to make sure there are no recursive references inside your object.
- * @param {Object|null} object will only process object passing isObject test
- * @param {boolean} recursive whether to recurse into children properties
- * @param {*|[*]|Function} removables object or array of objects that qualify as or test for `remove`
- * @returns {Object} same object passed as <param>object</object>
+ * @param object will only process object passing isObject test
+ * @param recursive whether to recurse into children properties
+ * @param removables object or array of objects that qualify as or test for `remove`
+ * @returns same object passed as <param>object</object>
  */
-function scrub(object, {
-	recursive=true,
-	removables=[undefined]
-}={}) {
+export function scrub(object: {[key: string]: any}, {
+	recursive = true,
+	removables = [undefined]
+} = {}): {[key: string]: any} {
 	if(!_.isArray(removables)) {
 		removables=[removables];
 	}
-	removables=removables.map((item)=>_.isFunction(item) ? item : (value)=>_.isEqual(value, item));
+	const removableTests=removables.map((item)=>_.isFunction(item) ? item : (value:any)=>_.isEqual(value, item)) as ((value:any, key:string)=>boolean)[];
 	if(_.isPlainObject(object)) {
 		_.forEach(object, function(value, key, parent) {
 			if(recursive) {
 				scrub(value, {recursive, removables});
 			}
 			for(let index=removables.length-1; index> -1; index--) {
-				if(removables[index](value, key)) {
+				if(removableTests[index](value, key)) {
 					delete parent[key];
 					break;
 				}
@@ -88,9 +81,3 @@ function scrub(object, {
 	}
 	return object;
 }
-
-module.exports={
-	delete: deletePath,
-	ensure,
-	scrub
-};
