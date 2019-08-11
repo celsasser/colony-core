@@ -74,7 +74,7 @@ export enum HttpStatusCode {
 	NETWORK_AUTHENTICATION_REQUIRED = 511
 }
 
-export const HttpStatusText = {
+export const HttpStatusText: {[key: number]: string} = {
 	100: "Continue",
 	101: "Switching Protocols",
 	102: "Processing",
@@ -138,3 +138,9 @@ export const HttpStatusText = {
 	510: "Not Extended",
 	511: "Network Authentication Required"
 };
+
+export function getHttpStatusText(code: number, dfault: string = code.toString()): string {
+	return (code in HttpStatusText)
+		? HttpStatusText[code]
+		: dfault;
+}

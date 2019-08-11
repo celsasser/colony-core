@@ -22,8 +22,7 @@ export function any(value1: any, value2: any, {
 	} else if(_.isString(value1) && _.isString(value2)) {
 		return string(value1, value2, {ignoreCase});
 	}
-	// @ts-ignore
-	return _.clamp(value1 - value2, -1, 1);
+	return _.clamp(value1 - value2, -1, 1) as -1|0|-1;
 }
 
 /**
@@ -43,7 +42,6 @@ export function string(s1: string, s2: string, {
 			s1 = s1.toLowerCase();
 			s2 = s2.toLowerCase();
 		}
-		// @ts-ignore
-		return _.clamp(s1.localeCompare(s2), -1, 1);
+		return _.clamp(s1.localeCompare(s2), -1, 1) as -1|0|-1;
 	}
 }

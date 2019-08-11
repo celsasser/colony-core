@@ -6,18 +6,19 @@
  */
 
 import * as _ from "lodash";
-import {
-	HttpStatusText,
-	HttpStatusCode
-} from "./enum/http";
-
-// note: be careful including relative dependencies in here as it has far reaches
+import {getHttpStatusText, HttpStatusCode} from "./enum/http";
 
 
 /**
  * Custom Error type that supports some "smart" constructors. And some property annotation support
  */
 export class ColonyError extends Error {
+	public details?: string;
+	public error?: Error;
+	public instance?: {[index: string]: any}|string;
+	public method?: string;
+	public statusCode?: HttpStatusCode|number;
+
 	/**
 	 * General purpose pig error that hold all of our secrets.  He is designed to stash information
 	 * related to the error so that we capture and report relevant info.  You may specify a number
@@ -33,46 +34,47 @@ export class ColonyError extends Error {
 	 * @param properties - additional properties that you want captured and logged.
 	 */
 	constructor({
-		details=undefined,
-		error=undefined,
-		instance=undefined,
-		message=undefined,
-		method=undefined,
-		statusCode=undefined,
+		details = undefined,
+		error = undefined,
+		instance = undefined,
+		message = undefined,
+		method = undefined,
+		statusCode = undefined,
 		...properties
 	}: {
 		details?: string,
 		error?: ColonyError|Error|string,
-		instance?: {[index:string]:any}|string,
+		instance?: {[index: string]: any}|string,
 		message?: string,
 		method?: string,
-		statusCode?: HttpStatusCode
+		statusCode?: HttpStatusCode|number
 	}) {
-		const leftovers=Object.assign({}, arguments[0]),
-			getMostImportant=function(preferredPropery: string) {
-				let result;
-				if(leftovers[preferredPropery]) {
-					result=leftovers[preferredPropery];
-					delete leftovers[preferredPropery];
-				} else if(leftovers.error) {
-					result=leftovers.error.message;
-					delete leftovers.error;
-				} else if(leftovers.statusCode) {
-					result=`${HttpStatusText[leftovers.statusCode]} (${leftovers.statusCode})`;
-					delete leftovers.statusCode;
-				}
-				return result;
-			};
+		function getMostImportant(preferredPropery: string): any {
+			let result;
+			if(leftovers[preferredPropery]) {
+				result = leftovers[preferredPropery];
+				delete leftovers[preferredPropery];
+			} else if(leftovers.error) {
+				result = leftovers.error.message;
+				delete leftovers.error;
+			} else if(leftovers.statusCode) {
+				result = `${getHttpStatusText(leftovers.statusCode)} (${leftovers.statusCode})`;
+				delete leftovers.statusCode;
+			}
+			return result;
+		}
+
+		const leftovers = Object.assign({}, arguments[0]);
 		super(message || getMostImportant("message"));
 		if(error) {
 			if(!_.isError(error)) {
-				error=new Error(error);
+				error = new Error(error);
 			}
 			// so that we can trace things to the true origin we steal his stack. There may be times at which we don't want to do this?
-			this.stack=error.stack;
+			this.stack = error.stack;
 			// steal goodies that we want to inherit
-			if(statusCode===undefined) {
-				statusCode=error.statusCode;
+			if((error as ColonyError).statusCode) {
+				statusCode = (error as ColonyError).statusCode;
 			}
 		}
 		_.merge(this, _.omitBy({

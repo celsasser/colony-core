@@ -5,11 +5,11 @@
  */
 
 
-const _=require("lodash");
-const compare=require("../../compare");
-const {
+import * as _ from "lodash";
+import {
 	searchCriteriaToIndex
-}=require("../_array");
+} from "../_array";
+const compare=require("../../compare");
 
 /**
  * @param {Array} array

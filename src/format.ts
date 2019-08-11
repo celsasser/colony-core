@@ -5,78 +5,82 @@
  *
  */
 
-const diagnostics=require("./diagnostics");
-const type=require("./type");
+
+import * as diagnostics from "./diagnostics";
+import {ColonyError} from "./error";
+import * as type from "./type";
 
 /**
  * Gets text suitable for different purposes. Caller may control the results with
  * <param>details</param>, <param>source</param> and <param>stack</param>
- * @param {Error|string} error
- * @param {string} details - whether to dig the details out of the error or not?
- * @param {string} source - whether to include the source of the error if it is in the error
- * @param {Boolean} stack - whether to include stack or not if <param>message</param> is an Error
- * @returns {string}
+ * @param error
+ * @param details - whether to dig the details out of the error or not?
+ * @param source - whether to include the source of the error if it is in the error
+ * @param stack - whether to include stack or not if <param>message</param> is an Error
  */
-module.exports.errorToString=function(error, {
-	details=true,
-	source=true,
-	stack=false
-}={}) {
-	let text="";
-	if(typeof (error)==="string") {
-		text=`${text}${error}`;
+export function errorToString(error: ColonyError|Error|string, {
+	details = true,
+	source = true,
+	stack = false
+}: {
+	details?: boolean,
+	source?: boolean,
+	stack?: boolean
+} = {}): string {
+	let text = "";
+	if(typeof (error) === "string") {
+		text = `${text}${error}`;
 	} else {
-		if(source===false) {
-			text=`${text}${error.message}`;
-		} else if(error.hasOwnProperty("instance") && error.hasOwnProperty("method")) {
-			text=`${text}${type.name(error.instance)}.${error.method}(): ${error.message}`;
-		} else if(error.hasOwnProperty("instance")) {
-			text=`${text}${type.name(error.instance)}: ${error.message}`;
-		} else if(error.hasOwnProperty("method")) {
-			text=`${text}${error.method}(): ${error.message}`;
+		if(source === false) {
+			text = `${text}${error.message}`;
+		} else if("instance" in error && "method" in error) {
+			text = `${text}${type.name(error.instance)}.${error.method}(): ${error.message}`;
+		} else if("instance" in error) {
+			text = `${text}${type.name(error.instance)}: ${error.message}`;
+		} else if("method" in error) {
+			text = `${text}${error.method}(): ${error.message}`;
 		} else {
-			text=`${text}${error.message}`;
+			text = `${text}${error.message}`;
 		}
 		if(details) {
-			if(error.hasOwnProperty("details")) {
-				text=`${text}. ${error.details}`;
-			} else if(error.hasOwnProperty("error")) {
-				text=`${text}. ${error.error}`;
+			if("details" in error) {
+				text = `${text}. ${(error as ColonyError).details}`;
+			} else if("error" in error) {
+				text = `${text}. ${error.error}`;
 			}
 		}
 		if(stack) {
-			text=`${text}\n${diagnostics.groomStack(error.stack, {popCount: 1})}`;
+			text = `${text}\n${diagnostics.groomStack(error.stack, {popCount: 1})}`;
 		}
 	}
 	return text;
-};
+}
 
 /**
  * This guy serves up text but text that adheres to a lazy convention we use for assertions and other functionality
  * for which we want lazy processing. The message may be the various things we know of that can be converted to text.
- * @param {undefined|string|Error|function():string} message
- * @param {string} dfault - if message is null or undefined
- * @param {Boolean} stack - whether to include stack or not if <param>message</param> is an Error
- * @returns {string}
+ * @param message
+ * @param dfault - if message is null or undefined
+ * @param stack - whether to include stack or not if <param>message</param> is an Error
  */
-module.exports.messageToString=function(message, {
-	dfault="",
-	stack=false
-}={}) {
+export function messageToString(message?: string|Error|(() => string), {
+	dfault = "",
+	stack = false
+} = {}): string {
 	if(message instanceof Error) {
-		return exports.errorToString(message, {stack});
+		return errorToString(message, {stack});
 	} else {
 		let text;
-		if(typeof (message)==="function") {
-			text=message();
+		if(typeof (message) === "function") {
+			text = message();
 		} else {
-			text=(message)
+			text = (message)
 				? message.toString()
 				: dfault;
 		}
 		if(stack) {
-			text+=`\n${diagnostics.getStack({popCount: 1})}`;
+			text += `\n${diagnostics.getStack({popCount: 1})}`;
 		}
 		return text;
 	}
-};
+}

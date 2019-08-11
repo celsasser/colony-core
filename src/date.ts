@@ -34,7 +34,7 @@ export function add(date: Date, {
 /**
  * Safely compares dates
  */
-export function isEqual(date1: Date, date2: Date): boolean {
+export function isEqual(date1?: Date, date2?: Date): boolean {
 	if(date1 === date2) {
 		return true;
 	} else if(date1 && date2) {

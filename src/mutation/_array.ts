@@ -4,32 +4,31 @@
  * @license MIT (see project's LICENSE file)
  */
 
-const _=require("lodash");
+import {findIndex, ListIterateeCustom} from "lodash";
 
 /**
  * Find index with given criteria
- * @param {Array} array
- * @param {*} element
- * @param {Number} index
- * @param {Object|Function} predicate that will be used by lodash to find our man
- * @returns {Number}
+ * @param array - array to search within
+ * @param element - optional element to search for
+ * @param index - odd case where index is known. Lets our API remain versatile
+ * @param predicate - that will be used by lodash to find our man
  * @throws {Error}
  */
-function searchCriteriaToIndex(array, {
-	element=undefined,
-	index=undefined,
-	predicate=undefined
-}) {
-	if(element!==undefined) {
-		index=array.indexOf(element);
-	} else if(predicate!==undefined) {
-		index=_.findIndex(array, predicate);
-	} else if(index===undefined) {
-		throw new Error("required index is missing");
+export function searchCriteriaToIndex<T>(array: T[], {
+	element = undefined,
+	index = undefined,
+	predicate = undefined
+}: {
+	element?: any,
+	index?: number,
+	predicate?: ListIterateeCustom<T, boolean>
+}): number {
+	if(element !== undefined) {
+		index = array.indexOf(element);
+	} else if(predicate !== undefined) {
+		index = findIndex(array, predicate);
+	} else if(index === undefined) {
+		throw new Error("essential search criteria is missing");
 	}
 	return index;
 }
-
-module.exports={
-	searchCriteriaToIndex
-};
