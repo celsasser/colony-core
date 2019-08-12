@@ -31,6 +31,9 @@ export const parallel = Promise.all;
  * @param series - series of functions that return promises
  * @param initialParameter - initial parameter into <code>series[0]()</code>
  */
-export function series<T = any>(series: (() => Promise<T>)[], initialParameter?: T): Promise<T[]> {
-	return series.reduce((current: Promise<T>, next: () => Promise<T>) => current.then(next), Promise.resolve(initialParameter));
+export function series<T = any>(series: (() => Promise<T>)[], initialParameter?: T): Promise<T> {
+	return series.reduce(
+		(current: Promise<T>, next: () => Promise<T>) => current.then(next),
+		Promise.resolve(initialParameter as T)
+	);
 }

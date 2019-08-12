@@ -4,7 +4,6 @@
  * @license MIT (see project's LICENSE file)
  */
 
-const _=require("lodash");
 const assert=require("colony-test").assert;
 const promise=require("../../dist/promise");
 
@@ -25,12 +24,6 @@ describe("promise", function() {
 	});
 
 	describe("series", function() {
-		it("should throw an error if the elements don't look like factories", function() {
-			assert.throws(()=>{
-				promise.series([new Promise(_.noop)]);
-			});
-		});
-
 		it("should properly create and return a promise chain", function(done) {
 			const accumulator=[];
 			promise.series([

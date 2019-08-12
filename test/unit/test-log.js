@@ -6,12 +6,22 @@
 
 const assert=require("colony-test").assert;
 const proxy=require("colony-test").proxy;
-const severity=require("../../dist/enum/severity");
+const {
+	Severity
+}=require("../../dist/enum");
 const {
 	LogBase
 }=require("../../dist/log");
 
 describe("log.LogBase", function() {
+	/**
+	 * A non-abstract implementation that we may use for testing
+	 */
+	class LogTest extends LogBase {
+		_logEntry(message, metadata) {}
+	}
+
+
 	afterEach(function() {
 		proxy.unstub();
 	});
@@ -22,21 +32,21 @@ describe("log.LogBase", function() {
 				applicationId: "applicationId",
 				environmentId: "environmentId",
 				sortMetadata: true,
-				threshold: severity.enum.WARN
+				threshold: Severity.WARN
 			});
 			assert.strictEqual(log.applicationId, "applicationId");
 			assert.strictEqual(log.environmentId, "environmentId");
 			assert.strictEqual(log.sortMetadata, true);
-			assert.strictEqual(log.threshold, severity.enum.WARN);
+			assert.strictEqual(log.threshold, Severity.WARN);
 		});
 	});
 
 	[
-		["debug", severity.enum.DEBUG],
-		["error", severity.enum.ERROR],
-		["fatal", severity.enum.FATAL],
-		["info", severity.enum.INFO],
-		["warn", severity.enum.WARN]
+		["debug", Severity.DEBUG],
+		["error", Severity.ERROR],
+		["fatal", Severity.FATAL],
+		["info", Severity.INFO],
+		["warn", Severity.WARN]
 	].forEach(([method, _severity])=>{
 		describe(method, function() {
 			it(`should properly call _processEntry with severity="${_severity}" and proper param values`, function() {
@@ -68,14 +78,14 @@ describe("log.LogBase", function() {
 
 	describe("_processEntry", function() {
 		[
-			[severity.enum.DEBUG],
-			[severity.enum.ERROR],
-			[severity.enum.FATAL],
-			[severity.enum.INFO],
-			[severity.enum.WARN]
+			Severity.DEBUG,
+			Severity.ERROR,
+			Severity.FATAL,
+			Severity.INFO,
+			Severity.WARN
 		].forEach(severity=>{
 			it(`should process ${severity} if no threshold is specified and call _processEntry with proper arguments`, function() {
-				const log=new LogBase({
+				const log=new LogTest({
 					applicationId: "applicationId",
 					environmentId: "environmentId"
 				});
@@ -102,17 +112,17 @@ describe("log.LogBase", function() {
 		});
 
 		[
-			[severity.enum.DEBUG, false],
-			[severity.enum.INFO, false],
-			[severity.enum.WARN, true],
-			[severity.enum.ERROR, true],
-			[severity.enum.FATAL, true]
+			[Severity.DEBUG, false],
+			[Severity.INFO, false],
+			[Severity.WARN, true],
+			[Severity.ERROR, true],
+			[Severity.FATAL, true]
 		].forEach(([_severity, process])=>{
-			it(`should properly ${process ? "process" : "bypass"} if severity=${_severity} and threshold=${severity.enum.WARN}`, function() {
-				const log=new LogBase({
+			it(`should properly ${process ? "process" : "bypass"} if severity=${_severity} and threshold=${Severity.WARN}`, function() {
+				const log=new LogTest({
 					applicationId: "applicationId",
 					environmentId: "environmentId",
-					threshold: severity.enum.WARN
+					threshold: Severity.WARN
 				});
 				proxy.spy(log, "_logEntry");
 				log._processEntry("message", {
@@ -124,7 +134,7 @@ describe("log.LogBase", function() {
 		});
 
 		it("should sort metadata properties if asked to", function() {
-			const log=new LogBase({
+			const log=new LogTest({
 				applicationId: "applicationId",
 				environmentId: "environmentId",
 				sortMetadata: true
@@ -155,7 +165,7 @@ describe("log.LogBase", function() {
 		});
 
 		it("should not sort metadata properties if not asked to", function() {
-			const log=new LogBase({
+			const log=new LogTest({
 				applicationId: "applicationId",
 				environmentId: "environmentId",
 				sortMetadata: false

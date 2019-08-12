@@ -12,17 +12,17 @@ import * as _ from "lodash";
 export function deletePath(object: {[key: string]: any}, path: string): {[key: string]: any} {
 	function _delete(_object: {[key: string]: any}, property: string) {
 		let index;
-		if(_.isArray(_object) && !_.isNaN(index=Number(property))) {
+		if(_.isArray(_object) && !_.isNaN(index = Number(property))) {
 			_object.splice(index, 1);
 		} else {
 			delete _object[property];
 		}
 	}
 
-	const index=_.lastIndexOf(path, ".");
-	if(index> -1) {
-		const property=path.substr(index+1),
-			parent=_.get(object, path.substr(0, index), {});
+	const index = _.lastIndexOf(path, ".");
+	if(index > -1) {
+		const property = path.substr(index + 1),
+			parent = _.get(object, path.substr(0, index), {});
 		_delete(parent, property);
 	} else {
 		_delete(object, path);
@@ -57,15 +57,17 @@ export function scrub(object: {[key: string]: any}, {
 	removables = [undefined]
 } = {}): {[key: string]: any} {
 	if(!_.isArray(removables)) {
-		removables=[removables];
+		removables = [removables];
 	}
-	const removableTests=removables.map((item)=>_.isFunction(item) ? item : (value:any)=>_.isEqual(value, item)) as ((value:any, key:string)=>boolean)[];
+	const removableTests = removables.map((item) => _.isFunction(item)
+		? item
+		: (value: any) => _.isEqual(value, item)) as ((value: any, key: string) => boolean)[];
 	if(_.isPlainObject(object)) {
 		_.forEach(object, function(value, key, parent) {
 			if(recursive) {
 				scrub(value, {recursive, removables});
 			}
-			for(let index=removables.length-1; index> -1; index--) {
+			for(let index = removables.length - 1; index > -1; index--) {
 				if(removableTests[index](value, key)) {
 					delete parent[key];
 					break;
@@ -73,9 +75,9 @@ export function scrub(object: {[key: string]: any}, {
 			}
 		});
 	} else if(_.isArray(object)) {
-		for(let index=object.length-1; index> -1; index--) {
+		for(let index = object.length - 1; index > -1; index--) {
 			if(recursive) {
-				object[index]=scrub(object[index], {recursive, removables});
+				object[index] = scrub(object[index], {recursive, removables});
 			}
 		}
 	}

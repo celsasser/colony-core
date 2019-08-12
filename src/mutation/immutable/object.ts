@@ -82,7 +82,7 @@ export function sort(object: any): any {
 		if(_.isPlainObject(object)) {
 			return Object.keys(object)
 				.sort()
-				.reduce((result:{[key: string]: any}, key) => {
+				.reduce((result: {[key: string]: any}, key) => {
 					result[key] = sort(object[key]);
 					return result;
 				}, {});

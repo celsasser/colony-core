@@ -6,23 +6,10 @@
  */
 
 import * as _ from "lodash";
-import {
-	Severity,
-	testSeverity
-} from "./enum";
+import {Severity, testSeverity} from "./enum";
 
 
 const immutable = require("./mutation").immutable;
-
-
-export type LogEntryMetadata = {
-	applicationId:string,
-	environmentId:string,
-	metadata?:{[index:string]:any},
-	moduleId:string,
-	severity:Severity,
-	timestamp:Date
-};
 
 type Message = string|(() => string);
 
@@ -32,22 +19,22 @@ type Message = string|(() => string);
  * platform. The idea is that this class encapsulates the broad strokes. There will be override points and
  * they will clearly be labelled
  */
-abstract class LogBase {
-	public readonly applicationId:string;
-	public readonly environmentId:string;
-	public readonly sortMetadata:boolean;
-	public readonly threshold:Severity;
+export abstract class LogBase {
+	public readonly applicationId: string;
+	public readonly environmentId: string;
+	public readonly sortMetadata: boolean;
+	public readonly threshold: Severity;
 
 	constructor({
 		applicationId,
 		environmentId,
 		sortMetadata = true,
-		threshold = Severity.INFO
-	}:{
-		applicationId:string,
-		environmentId:string,
-		sortMetadata:boolean,
-		threshold:Severity
+		threshold = Severity.DEBUG
+	}: {
+		applicationId: string,
+		environmentId: string,
+		sortMetadata: boolean,
+		threshold: Severity
 	}) {
 		this.applicationId = applicationId;
 		this.environmentId = environmentId;
@@ -56,14 +43,14 @@ abstract class LogBase {
 	}
 
 	/********************* Public Interface *********************/
-	public debug(message:Message, {
+	public debug(message: Message, {
 		metadata = undefined,
 		moduleId,
 		traceId = undefined
 	}: {
-		metadata?:{[index:string]:any},
-		moduleId:string,
-		traceId?:string
+		metadata?: {[index: string]: any},
+		moduleId: string,
+		traceId?: string
 	}) {
 		this._processEntry(message, {
 			metadata,
@@ -73,14 +60,14 @@ abstract class LogBase {
 		});
 	}
 
-	public error(message:Message, {
+	public error(message: Message, {
 		metadata = undefined,
 		moduleId,
 		traceId = undefined
 	}: {
-		metadata?:{[index:string]:any},
-		moduleId:string,
-		traceId?:string
+		metadata?: {[index: string]: any},
+		moduleId: string,
+		traceId?: string
 	}) {
 		this._processEntry(message, {
 			metadata,
@@ -90,14 +77,14 @@ abstract class LogBase {
 		});
 	}
 
-	public fatal(message:Message, {
+	public fatal(message: Message, {
 		metadata = undefined,
 		moduleId,
 		traceId = undefined
 	}: {
-		metadata?:{[index:string]:any},
-		moduleId:string,
-		traceId?:string
+		metadata?: {[index: string]: any},
+		moduleId: string,
+		traceId?: string
 	}) {
 		this._processEntry(message, {
 			metadata,
@@ -107,14 +94,14 @@ abstract class LogBase {
 		});
 	}
 
-	public info(message:Message, {
+	public info(message: Message, {
 		metadata = undefined,
 		moduleId,
 		traceId = undefined
 	}: {
-		metadata?:{[index:string]:any},
-		moduleId:string,
-		traceId?:string
+		metadata?: {[index: string]: any},
+		moduleId: string,
+		traceId?: string
 	}) {
 		this._processEntry(message, {
 			metadata,
@@ -124,14 +111,14 @@ abstract class LogBase {
 		});
 	}
 
-	public warn(message:Message, {
+	public warn(message: Message, {
 		metadata = undefined,
 		moduleId,
 		traceId = undefined
 	}: {
-		metadata?:{[index:string]:any},
-		moduleId:string,
-		traceId?:string
+		metadata?: {[index: string]: any},
+		moduleId: string,
+		traceId?: string
 	}) {
 		this._processEntry(message, {
 			metadata,
@@ -145,7 +132,7 @@ abstract class LogBase {
 	/**
 	 * Derived classes should implement this method
 	 */
-	protected abstract _logEntry(message:string, metadata:{[index:string]:any}):void;
+	protected abstract _logEntry(message: string, metadata: {[index: string]: any}): void;
 
 	/********************* Private Interface *********************/
 	/**
@@ -156,16 +143,16 @@ abstract class LogBase {
 	 * @param {string|undefined} traceId
 	 * @private
 	 */
-	private _processEntry(message:Message, {
+	private _processEntry(message: Message, {
 		metadata,
 		moduleId,
 		severity,
 		traceId
 	}: {
-		metadata?:{[index:string]:any},
-		moduleId:string,
-		severity:Severity,
-		traceId?:string
+		metadata?: {[index: string]: any},
+		moduleId: string,
+		severity: Severity,
+		traceId?: string
 	}) {
 		if(testSeverity(severity, this.threshold)) {
 			if(_.isFunction(message)) {
@@ -185,8 +172,3 @@ abstract class LogBase {
 		}
 	}
 }
-
-module.exports = {
-	LogBase
-};
-

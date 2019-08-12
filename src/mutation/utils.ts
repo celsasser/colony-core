@@ -4,10 +4,7 @@
  * @license MIT (see project's LICENSE file)
  */
 
-import {
-	ListIterateeCustom,
-	findIndex
-} from "lodash";
+import {findIndex, ListIterateeCustom} from "lodash";
 
 /**
  * Find index with given criteria

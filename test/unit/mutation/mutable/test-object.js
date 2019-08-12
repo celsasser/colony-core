@@ -9,13 +9,13 @@ const object=require("../../../../dist/mutation").mutable.object;
 
 
 describe("mutation.mutable.object", function() {
-	describe("delete", function() {
+	describe("deletePath", function() {
 		it("should not do anything if object is empty", function() {
-			assert.deepEqual(object.delete({}, "a"), {});
+			assert.deepEqual(object.deletePath({}, "a"), {});
 		});
 
 		it("should not do anything if path does not exist", function() {
-			const result=object.delete({
+			const result=object.deletePath({
 				a: {b: 1}
 			}, "a.c");
 			assert.deepEqual(result, {
@@ -24,14 +24,14 @@ describe("mutation.mutable.object", function() {
 		});
 
 		it("should delete root if no depth", function() {
-			const result=object.delete({
+			const result=object.deletePath({
 				a: {b: 1}
 			}, "a");
 			assert.deepEqual(result, {});
 		});
 
 		it("should nested property properly", function() {
-			const result=object.delete({
+			const result=object.deletePath({
 				a: {
 					b: {
 						c: 1,
@@ -47,7 +47,7 @@ describe("mutation.mutable.object", function() {
 		});
 
 		it("should delete array element if target is an array", function() {
-			const result=object.delete({
+			const result=object.deletePath({
 				a: [1, 2]
 			}, "a.1");
 			assert.deepEqual(result, {a: [1]});

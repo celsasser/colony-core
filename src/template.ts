@@ -5,33 +5,32 @@
  *
  */
 
-const _=require("lodash");
-const {ColonyError}=require("./error");
+import * as _ from "lodash";
+import {ColonyError} from "./error";
 
-const storage={
-	cache: {}
-};
+const cache: {[key: string]: _.TemplateExecutor} = {};
 
 /**
  * Does substitution of variables in template string. Encoding of variables should be as follows: {{variable}}
- * @param {string} template
- * @param {Object} variables - set of key/values
- * @param {RegExp} interpolate - regex pattern for finding substitution variables
- * @returns {string}
+ * @param template
+ * @param variables - set of key/values
+ * @param interpolate - regex pattern for finding substitution variables
  */
-exports.render=function(template, variables, {
-	interpolate=/{{\s*(\S+?)\s*}}/g
-}={}) {
-	if(!storage.cache.hasOwnProperty(template)) {
-		storage.cache[template]=_.template(template, {interpolate});
+export function render(template: string, variables: {[key: string]: any}, {
+	interpolate = /{{\s*(\S+?)\s*}}/g
+}: {
+	interpolate?: RegExp
+} = {}): string {
+	if(!(template in cache)) {
+		cache[template] = _.template(template, {interpolate});
 	}
 	try {
-		return storage.cache[template](variables);
+		return cache[template](variables);
 	} catch(error) {
 		throw new ColonyError({
 			error,
-			details: `function=${storage.cache[template].toString()}\nvariables=${JSON.stringify(variables)}`,
+			details: `function=${cache[template].toString()}\nvariables=${JSON.stringify(variables)}`,
 			message: `attempt to render template='${template}' failed`
 		});
 	}
-};
+}

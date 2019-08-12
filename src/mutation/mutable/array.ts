@@ -5,17 +5,15 @@
  */
 
 import * as _ from "lodash";
-import {
-	searchCriteriaToIndex
-} from "../utils";
+import {searchCriteriaToIndex} from "../utils";
 import * as compare from "../../compare";
 
 
 export function add<T>(array: T[], element: T, index?: number): T[] {
 	if(!array) {
-		array=[];
+		array = [];
 	}
-	if(index===undefined) {
+	if(index === undefined) {
 		array.push(element);
 	} else {
 		return array.splice(index, 0, element);
@@ -25,15 +23,15 @@ export function add<T>(array: T[], element: T, index?: number): T[] {
 
 export function concat<T>(array: T[], elements: T[], index?: number): T[] {
 	if(!array) {
-		array=[];
+		array = [];
 	}
-	if(index===undefined) {
+	if(index === undefined) {
 		_.each(elements, function(element) {
 			array.push(element);
 		});
 	} else {
 		_.each(elements, function(element, offset) {
-			return array.splice(index+offset, 0, element);
+			return array.splice(index + offset, 0, element);
 		});
 	}
 	return array;
@@ -43,8 +41,8 @@ export function concat<T>(array: T[], elements: T[], index?: number): T[] {
  * Performs omit on each element in the specified array
  */
 export function omit(array: {[key: string]: any}[], path: string): {[key: string]: any}[] {
-	_.forEach(array, (object, index)=>{
-		array[index]=_.omit(object, path);
+	_.forEach(array, (object, index) => {
+		array[index] = _.omit(object, path);
 	});
 	return array;
 }
@@ -53,8 +51,8 @@ export function omit(array: {[key: string]: any}[], path: string): {[key: string
  * Performs pick on each element in the specified array
  */
 export function pick(array: {[key: string]: any}[], path: string): {[key: string]: any}[] {
-	_.forEach(array, (object, index)=>{
-		array[index]=_.pick(object, path);
+	_.forEach(array, (object, index) => {
+		array[index] = _.pick(object, path);
 	});
 	return array;
 }
@@ -74,8 +72,8 @@ export function remove<T>(array: T[], {
 	index?: number,
 	predicate?: _.ListIterateeCustom<T, boolean>
 }): T[] {
-	index=searchCriteriaToIndex(array, {element, index, predicate});
-	if(index> -1) {
+	index = searchCriteriaToIndex(array, {element, index, predicate});
+	if(index > -1) {
 		array.splice(index, 1);
 	}
 	return array;
@@ -98,9 +96,9 @@ export function replace<T>(array: T[], newElement: T, {
 	index?: number,
 	predicate?: _.ListIterateeCustom<T, boolean>
 }): T[] {
-	index=searchCriteriaToIndex(array, {element, index, predicate});
-	if(index> -1) {
-		array[index]=newElement;
+	index = searchCriteriaToIndex(array, {element, index, predicate});
+	if(index > -1) {
+		array[index] = newElement;
 	} else {
 		throw new Error("mutable.array.replace(): Could not find element to replace");
 	}
@@ -115,7 +113,7 @@ export function sort(array: {[key: string]: any}[], property: string, {
 	reverse = false
 } = {}): {[key: string]: any}[]|undefined {
 	if(array) {
-		array.sort((o1, o2)=>comparer(_.get(o1, property), _.get(o2, property)));
+		array.sort((o1, o2) => comparer(_.get(o1, property), _.get(o2, property)));
 		if(reverse) {
 			array.reverse();
 		}

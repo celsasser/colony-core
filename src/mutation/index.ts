@@ -17,4 +17,4 @@ export const immutable = {
 export const mutable = {
 	array: mutableArray,
 	object: mutableObject
-}
+};

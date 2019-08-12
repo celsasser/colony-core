@@ -24,6 +24,6 @@ export enum Severity {
 /**
  * Is the <param>severity</param> param greater than or equal to the <param>threshold</param> param
  */
-export function testSeverity(value:Severity, threshold:Severity):boolean {
+export function testSeverity(value: Severity, threshold: Severity): boolean {
 	return order.indexOf(value) >= order.indexOf(threshold);
 }

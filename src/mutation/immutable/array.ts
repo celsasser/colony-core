@@ -6,9 +6,7 @@
 
 
 import * as _ from "lodash";
-import {
-	searchCriteriaToIndex
-} from "../utils";
+import {searchCriteriaToIndex} from "../utils";
 import * as compare from "../../compare";
 
 

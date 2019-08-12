@@ -31,10 +31,10 @@ export function any(value1: any, value2: any, {
 export function string(s1: string, s2: string, {
 	ignoreCase = true
 } = {}): -1|0|1 {
-	if(s1 === s2) {
-		return 0;
-	} else if(s1 == null) {
-		return 1;
+	if(s1 == null) {
+		return (s2 == null)
+			? 0
+			: 1;
 	} else if(s2 == null) {
 		return -1;
 	} else {

@@ -34,8 +34,8 @@ export function create({
  * Parses a urn and returns bits
  * @throws {Error}
  */
-export function parse(urn: string, parts? : string[]): {
-	parts: string[]|{[index:string]:string},
+export function parse(urn: string, parts?: string[]): {
+	parts: string[]|{[index: string]: string},
 	unique: string
 } {
 	const match = urn.match(/^urn:(([\w_-]+):){1,}([\w_-]+)$/);
@@ -53,7 +53,7 @@ export function parse(urn: string, parts? : string[]): {
 				throw new Error(`parts=${JSON.stringify(parts)} is mismatched with urn ${urn}`);
 			}
 			return {
-				parts: parts.reduce((result:{[index:string]:string}, part:string, index:number) => {
+				parts: parts.reduce((result: {[index: string]: string}, part: string, index: number) => {
 					result[part] = split[index + 1];
 					return result;
 				}, {}),

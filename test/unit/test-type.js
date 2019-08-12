@@ -33,6 +33,7 @@ describe("type", function() {
 
 		it("should properly get name of class", function() {
 			class Dummy {}
+
 			assert.strictEqual(type.name(new Dummy()), "Dummy");
 		});
 	});

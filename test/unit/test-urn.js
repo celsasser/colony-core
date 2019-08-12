@@ -36,7 +36,7 @@ describe("urn", function() {
 		it("should throw an exception if not a valid urn", function() {
 			assert.throws(
 				urn.parse.bind(null, "invalid"),
-				error=>error.message==='invalid urn "invalid"'
+				error=>error.message==="invalid urn \"invalid\""
 			);
 		});
 
@@ -58,7 +58,7 @@ describe("urn", function() {
 		it("should throw an exception if parts length does not match parsed length", function() {
 			assert.throws(
 				urn.parse.bind(null, "urn:cat:george:id", ["species"]),
-				error=>error.message==='parts=["species"] is mismatched with urn urn:cat:george:id'
+				error=>error.message==="parts=[\"species\"] is mismatched with urn urn:cat:george:id"
 			);
 		});
 	});

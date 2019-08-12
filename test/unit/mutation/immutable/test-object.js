@@ -28,12 +28,12 @@ describe("mutation.immutable.object", function() {
 		});
 	});
 
-	describe("delete", function() {
+	describe("deletePath", function() {
 		it("should clone the object and call down to mutable", function() {
 			const source={
 					a: "value"
 				},
-				result=immutable.object.delete(source, "a");
+				result=immutable.object.deletePath(source, "a");
 			assert.notStrictEqual(result, source);
 			assert.deepEqual(result, {});
 		});
