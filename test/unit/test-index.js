@@ -4,32 +4,45 @@
  * @license MIT (see project's LICENSE file)
  */
 
-const _=require("lodash");
 const assert=require("colony-test").assert;
-const index=require("../../lib/index");
+const index=require("../../dist/index");
+const compare=require("../../dist/compare");
+const date=require("../../dist/date");
+const diagnostics=require("../../dist/diagnostics");
+const enums=require("../../dist/enum");
+const error=require("../../dist/error");
+const format=require("../../dist/format");
+const log=require("../../dist/log");
+const mutation=require("../../dist/mutation");
+const promise=require("../../dist/promise");
+const template=require("../../dist/template");
+const type=require("../../dist/type");
+const urn=require("../../dist/urn");
 
 describe("index", function() {
-	it("should properly import each public module", function() {
-		const set=new Set(),
-			moduleNames=[
-				"compare",
-				"date",
-				"diagnostics",
-				"enum",
-				"error",
-				"format",
-				"mutation",
-				"promise",
-				"template",
-				"type"
-			];
-		moduleNames.forEach((name)=>{
-			const moduleLoad=_.get(index, name),
-				moduleCache=_.get(index, name);
-			assert.strictEqual(typeof (moduleLoad), "object", `module=${name} failed`);
-			assert.strictEqual(moduleLoad, moduleCache);
-			set.add(moduleLoad);
+	[
+		["ColonyError", index.ColonyError, error.ColonyError],
+		["compare", index.compare, compare],
+		["date", index.date, date],
+		["diagnostics", index.diagnostics, diagnostics],
+		["format", index.format, format],
+		["getHttpStatusText", index.getHttpStatusText, enums.getHttpStatusText],
+		["HttpMethod", index.HttpMethod, enums.HttpMethod],
+		["HttpStatusCode", index.HttpStatusCode, enums.HttpStatusCode],
+		["HttpStatusText", index.HttpStatusText, enums.HttpStatusText],
+		["immutable", index.immutable, mutation.immutable],
+		["LogBase", index.LogBase, log.LogBase],
+		["mutable", index.mutable, mutation.mutable],
+		["Priority", index.Priority, enums.Priority],
+		["promise", index.promise, promise],
+		["Severity", index.Severity, enums.Severity],
+		["template", index.template, template],
+		["testSeverity", index.testSeverity, enums.testSeverity],
+		["type", index.type, type],
+		["urn", index.urn, urn]
+	].forEach(([name, indexReference, internalReference])=>{
+		it(`should properly export ${name}`, function() {
+			assert.strictEqual(indexReference, internalReference, `${name} test failed`);
 		});
-		assert.strictEqual(moduleNames.length, set.size);
 	});
 });

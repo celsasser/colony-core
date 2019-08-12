@@ -3,20 +3,22 @@
 	"description": "Library that should be included in every Colony project we build",
 	"homepage": "https://github.com/celsasser/colony-core.git#readme",
 	"license": "Apache-2.0",
-	"main": "lib/index.js",
+	"main": "dist/index.js",
 	"name": "colony-core",
 	"readmeFilename": "README.md",
-	"version": "1.1.1",
+	"version": "1.2.0",
 	"dependencies": {
-		"lodash": "4.17.14",
+		"lodash": "4.17.15",
 		"shortid": "2.2.14"
 	},
 	"devDependencies": {
-		"colony-test": "^1.0.2",
-		"eslint": "6.0.1",
+		"@types/lodash": "^4.14.136",
+		"@types/node": "^10.14.13",
+		"colony-test": "^1.2.0",
 		"mocha": "6.1.4",
-		"pig-quality": "^1.0.1",
-		"sinon": "7.3.2"
+		"sinon": "7.3.2",
+		"tslint": "5.18.0",
+		"typescript": "3.5.3"
 	},
 	"keywords": [
 		"core",
@@ -24,8 +26,8 @@
 		"colony"
 	],
 	"scripts": {
-		"lint": "eslint --config ./node_modules/pig-quality/server.eslintrc.json lib/**/*.js test/**/*.js",
-		"lint+fix": "eslint ./node_modules/pig-quality/server.eslintrc.json --fix lib/**/*.js test/**/*.js",
+		"build": "tsc -d",
+		"deploy": "npm run test && npm publish",
 		"test": "npm run test:unit",
 		"test:integration": "echo > /dev/null",
 		"test:unit": "mocha --recursive ./test/unit"

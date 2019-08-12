@@ -6,8 +6,8 @@
 
 const assert=require("colony-test").assert;
 const proxy=require("colony-test").proxy;
-const immutable=require("../../../../lib/mutation").immutable;
-const mutable=require("../../../../lib/mutation").mutable;
+const immutable=require("../../../../dist/mutation").immutable;
+const mutable=require("../../../../dist/mutation").mutable;
 
 
 describe("mutation.immutable.object", function() {
@@ -28,12 +28,12 @@ describe("mutation.immutable.object", function() {
 		});
 	});
 
-	describe("delete", function() {
+	describe("deletePath", function() {
 		it("should clone the object and call down to mutable", function() {
 			const source={
 					a: "value"
 				},
-				result=immutable.object.delete(source, "a");
+				result=immutable.object.deletePath(source, "a");
 			assert.notStrictEqual(result, source);
 			assert.deepEqual(result, {});
 		});

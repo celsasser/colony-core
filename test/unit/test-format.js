@@ -5,8 +5,8 @@
  */
 
 const assert=require("colony-test").assert;
-const {ColonyError}=require("../../lib/error");
-const format=require("../../lib/format");
+const {ColonyError}=require("../../dist/error");
+const format=require("../../dist/format");
 
 
 describe("format", function() {

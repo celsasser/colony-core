@@ -4,7 +4,7 @@
  */
 
 const assert=require("assert");
-const type=require("../../lib/type");
+const type=require("../../dist/type");
 
 
 describe("type", function() {
@@ -33,6 +33,7 @@ describe("type", function() {
 
 		it("should properly get name of class", function() {
 			class Dummy {}
+
 			assert.strictEqual(type.name(new Dummy()), "Dummy");
 		});
 	});

@@ -5,7 +5,7 @@
  */
 
 const assert=require("colony-test").assert;
-const array=require("../../../../lib/mutation").immutable.array;
+const array=require("../../../../dist/mutation").immutable.array;
 
 
 describe("mutation.immutable.array", function() {

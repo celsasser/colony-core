@@ -5,7 +5,7 @@
  */
 
 const assert=require("colony-test").assert;
-const template=require("../../lib/template");
+const template=require("../../dist/template");
 
 describe("template", function() {
 	it("should properly substitute variables in properly marked up template string", function() {

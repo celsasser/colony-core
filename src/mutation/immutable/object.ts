@@ -4,29 +4,35 @@
  * @license MIT (see project's LICENSE file)
  */
 
-const _=require("lodash");
-const mutable=require("../_mutable/object");
+import * as _ from "lodash";
+import * as mutable from "../mutable/object";
 
 
 /**
  * Clones an object or object path
- * @param {Object|null} object
- * @param {string} path - It minimized the amount of data that needs to be cloned
+ * @param object
+ * @param path - It minimized the amount of data that needs to be cloned
  * @param {boolean} deep
  * @returns {Object}
  */
-function clone(object, {
-	path=undefined,
-	deep=false
-}={}) {
-	if(_.isEmpty(path)) {
+export function clone(object: {[key: string]: any}, {
+	path,
+	deep = false
+}: {
+	path?: string,
+	deep?: boolean
+} = {}): {[key: string]: any} {
+	if(path == null || path.length === 0) {
 		return (deep)
 			? _.cloneDeep(object)
 			: Object.assign({}, object);
 	} else {
-		let parts=path.split(".");
-		object=_.clone(object);
-		object[parts[0]]=clone(object[parts[0]], parts.slice(1).join(), deep);
+		let parts = path.split(".");
+		object = _.clone(object);
+		object[parts[0]] = clone(object[parts[0]], {
+			path: parts.slice(1).join(),
+			deep
+		});
 		return object;
 	}
 }
@@ -37,20 +43,16 @@ function clone(object, {
  * @param {string} path
  * @returns {Object|Array}
  */
-function deletePath(object, path) {
-	return mutable.delete(_.cloneDeep(object), path);
+export function deletePath(object: {[key: string]: any}, path: string): {[key: string]: any} {
+	return mutable.deletePath(_.cloneDeep(object), path);
 }
 
 /**
  * A variation of lodash's set but only sets if the value is not set:
  * - if object is not set then it defaults to {}
  * - it returns the value at "path"
- * @param {Object|null} object
- * @param {string} path
- * @param {*} value
- * @returns {Object|string}
  */
-function ensure(object, path, value) {
+export function ensure<T>(object: {[key: string]: any}, path: string, value: T): {[key: string]: any} {
 	return mutable.ensure(_.cloneDeep(object), path, value);
 }
 
@@ -58,15 +60,14 @@ function ensure(object, path, value) {
  * Removes properties of objects with <param>removables</param>values. It does not remove <param>removables</param> from arrays
  * but it does recursively process array elements and should they be objects then it will scrub those objects.
  * Note: must be careful to make sure there are no recursive references inside your object.
- * @param {Object|null} object will only process object passing isObject test
- * @param {boolean} recursive whether to recurse into children properties
- * @param {*|[*]|Function} removables object or array of objects that qualify as or test for `remove`
- * @returns {Object} same object passed as <param>object</object>
+ * @param object will only process object passing isObject test
+ * @param recursive whether to recurse into children properties
+ * @param removables object or array of objects that qualify as or test for `remove`
  */
-function scrub(object, {
-	recursive=true,
-	removables=[undefined]
-}={}) {
+export function scrub(object: {[key: string]: any}, {
+	recursive = true,
+	removables = [undefined]
+} = {}): {[key: string]: any} {
 	return mutable.scrub(_.cloneDeep(object), {
 		recursive,
 		removables
@@ -75,16 +76,14 @@ function scrub(object, {
 
 /**
  * Recursively sorts object's properties
- * @param {Object|null|undefined} object
- * @returns {Object}
  */
-function sort(object) {
-	if(object!=null) {
+export function sort(object: any): any {
+	if(object != null) {
 		if(_.isPlainObject(object)) {
 			return Object.keys(object)
 				.sort()
-				.reduce((result, key)=>{
-					result[key]=sort(object[key]);
+				.reduce((result: {[key: string]: any}, key) => {
+					result[key] = sort(object[key]);
 					return result;
 				}, {});
 		} else if(_.isArray(object)) {
@@ -93,11 +92,3 @@ function sort(object) {
 	}
 	return object;
 }
-
-module.exports={
-	clone,
-	delete: deletePath,
-	ensure,
-	scrub,
-	sort
-};
