@@ -6,7 +6,10 @@
  */
 
 import * as _ from "lodash";
-import {getHttpStatusText, HttpStatusCode} from "./enum/http";
+import {
+	getHttpStatusText,
+	HttpStatusCode
+} from "./enum/http";
 
 
 /**

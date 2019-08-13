@@ -6,7 +6,10 @@
  */
 
 import * as _ from "lodash";
-import {Severity, testSeverity} from "./enum";
+import {
+	Severity,
+	testSeverity
+} from "./enum";
 
 
 const immutable = require("./mutation").immutable;
