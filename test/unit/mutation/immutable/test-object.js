@@ -17,14 +17,12 @@ describe("mutation.immutable.object", function() {
 
 	describe("clone", function() {
 		it("should remain immutable", function() {
-			const source={
+			const source=Object.freeze({
 					body: "data"
-				},
-				isImmutable=assert.immutable(source);
+				});
 			const result=immutable.object.clone(source, "");
 			assert.notStrictEqual(source, result);
 			assert.deepEqual(result, source);
-			isImmutable();
 		});
 	});
 

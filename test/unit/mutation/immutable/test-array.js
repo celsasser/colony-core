@@ -14,18 +14,14 @@ describe("mutation.immutable.array", function() {
 			assert.deepEqual(array.add(null, 1), [1]);
 		});
 
-		it("should append an element to an existing array", function() {
-			const original=[1],
-				assertImmutable=assert.immutable(original);
+		it("should append an element to array and return new result", function() {
+			const original=Object.freeze([1]);
 			assert.deepEqual(array.add(original, 2), [1, 2]);
-			assert.doesNotThrow(assertImmutable);
 		});
 
 		it("should insert an element to an existing array", function() {
-			const original=[1, 3],
-				assertImmutable=assert.immutable(original);
+			const original=Object.freeze([1, 3]);
 			assert.deepEqual(array.add(original, 2, 1), [1, 2, 3]);
-			assert.doesNotThrow(assertImmutable);
 		});
 	});
 
@@ -35,17 +31,13 @@ describe("mutation.immutable.array", function() {
 		});
 
 		it("should append an element to an existing array", function() {
-			const original=[1],
-				assertImmutable=assert.immutable(original);
+			const original=Object.freeze([1]);
 			assert.deepEqual(array.concat(original, [2, 3]), [1, 2, 3]);
-			assert.doesNotThrow(assertImmutable);
 		});
 
 		it("should insert elements into an existing array", function() {
-			const original=[1, 4],
-				assertImmutable=assert.immutable(original);
+			const original=Object.freeze([1, 4]);
 			assert.deepEqual(array.concat(original, [2, 3], 1), [1, 2, 3, 4]);
-			assert.doesNotThrow(assertImmutable);
 		});
 	});
 
@@ -95,33 +87,25 @@ describe("mutation.immutable.array", function() {
 
 	describe("remove", function() {
 		it("should remove an element by reference", function() {
-			const original=["good", "bad"],
-				assertImmutable=assert.immutable(original);
+			const original=Object.freeze(["good", "bad"]);
 			assert.deepEqual(array.remove(original, {element: "bad"}), ["good"]);
-			assert.doesNotThrow(assertImmutable);
 		});
 
 		it("should remove an element by index", function() {
-			const original=["good", "bad"],
-				assertImmutable=assert.immutable(original);
+			const original=Object.freeze(["good", "bad"]);
 			assert.deepEqual(array.remove(original, {index: 0}), ["bad"]);
-			assert.doesNotThrow(assertImmutable);
 		});
 	});
 
 	describe("replace", function() {
 		it("should replace an element by reference", function() {
-			const original=["good", "bad"],
-				assertImmutable=assert.immutable(original);
+			const original=Object.freeze(["good", "bad"]);
 			assert.deepEqual(array.replace(original, "new", {element: "bad"}), ["good", "new"]);
-			assert.doesNotThrow(assertImmutable);
 		});
 
 		it("should replace an element by index", function() {
-			const original=["good", "bad"],
-				assertImmutable=assert.immutable(original);
+			const original=Object.freeze(["good", "bad"]);
 			assert.deepEqual(array.replace(original, "new", {index: 1}), ["good", "new"]);
-			assert.doesNotThrow(assertImmutable);
 		});
 	});
 });
