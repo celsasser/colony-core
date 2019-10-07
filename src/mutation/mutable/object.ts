@@ -68,7 +68,13 @@ export function scrub(object: {[key: string]: any}, {
 	const removableTests = removables.map((item) => _.isFunction(item)
 		? item
 		: (value: any) => _.isEqual(value, item)) as ((value: any, key: string) => boolean)[];
-	if(_.isPlainObject(object)) {
+	if(_.isArray(object)) {
+		for(let index = object.length - 1; index > -1; index--) {
+			if(recursive) {
+				object[index] = scrub(object[index], {recursive, removables});
+			}
+		}
+	} else if(typeof(object) === "object") {
 		_.forEach(object, function(value, key, parent) {
 			if(recursive) {
 				scrub(value, {recursive, removables});
@@ -80,12 +86,6 @@ export function scrub(object: {[key: string]: any}, {
 				}
 			}
 		});
-	} else if(_.isArray(object)) {
-		for(let index = object.length - 1; index > -1; index--) {
-			if(recursive) {
-				object[index] = scrub(object[index], {recursive, removables});
-			}
-		}
 	}
 	return object;
 }

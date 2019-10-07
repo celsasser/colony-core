@@ -6,7 +6,7 @@
 	"main": "dist/index",
 	"name": "colony-core",
 	"readmeFilename": "README.md",
-	"version": "1.2.6",
+	"version": "1.2.7",
 	"dependencies": {
 		"lodash": "4.17.15",
 		"shortid": "2.2.15"
