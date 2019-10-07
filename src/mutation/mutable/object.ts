@@ -6,6 +6,9 @@
 
 import * as _ from "lodash";
 
+export type RemovableFilter = (value: any, key: string) => boolean;
+export type RemovableType = any|RemovableFilter;
+
 /**
  * Deletes the object at the property path in <code>object</code>
  */
@@ -55,6 +58,9 @@ export function ensure<T>(object: {[key: string]: any}, path: string, value: T):
 export function scrub(object: {[key: string]: any}, {
 	recursive = true,
 	removables = [undefined]
+}: {
+	recursive?: boolean,
+	removables?: RemovableType[]
 } = {}): {[key: string]: any} {
 	if(!_.isArray(removables)) {
 		removables = [removables];

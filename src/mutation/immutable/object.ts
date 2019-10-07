@@ -67,6 +67,9 @@ export function ensure<T>(object: {[key: string]: any}, path: string, value: T):
 export function scrub(object: {[key: string]: any}, {
 	recursive = true,
 	removables = [undefined]
+}: {
+	recursive?: boolean,
+	removables?: mutable.RemovableType[],
 } = {}): {[key: string]: any} {
 	return mutable.scrub(_.cloneDeep(object), {
 		recursive,
