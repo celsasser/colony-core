@@ -52,11 +52,11 @@ export class ColonyError extends Error {
 		method?: string,
 		statusCode?: HttpStatusCode|number
 	}) {
-		function getMostImportant(preferredPropery: string): any {
+		function getMostImportant(preferredProperty: string): any {
 			let result;
-			if(leftovers[preferredPropery]) {
-				result = leftovers[preferredPropery];
-				delete leftovers[preferredPropery];
+			if(leftovers[preferredProperty]) {
+				result = leftovers[preferredProperty];
+				delete leftovers[preferredProperty];
 			} else if(leftovers.error) {
 				result = leftovers.error.message;
 				delete leftovers.error;

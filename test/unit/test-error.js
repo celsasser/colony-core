@@ -19,7 +19,6 @@ describe("error", function() {
 		describe("constructor", function() {
 			it("should populate all supported params properly", function() {
 				const instance=new ColonyError({
-					code: 200,
 					details: "details",
 					error: new Error("error"),
 					instance: "instance",
@@ -28,7 +27,6 @@ describe("error", function() {
 					statusCode: 100
 				});
 				assert.deepEqual(_toPOJO(instance), {
-					code: 200,
 					details: "details",
 					error: new Error("error"),
 					instance: "instance",
